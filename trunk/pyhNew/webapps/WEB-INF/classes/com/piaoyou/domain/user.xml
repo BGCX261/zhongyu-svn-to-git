@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="user">
+	<typeAlias alias="user" type="com.piaoyou.domain.User" />
+	<typeAlias alias="userTag" type="com.piaoyou.domain.UserTag" />
+	<typeAlias alias="blackList" type="com.piaoyou.domain.BlackList" />
+	<typeAlias alias="commenterAuthInfo" type="com.piaoyou.domain.CommenterAuthInfo" />
+	<resultMap id="getTagsResult" class="java.util.HashMap">
+	<result property="tag_id" column="tag_id" />
+	<result property="tag_content" column="tag_content"/>
+	</resultMap>
+	
+	<resultMap id="getMyTagsResult" class="java.util.HashMap">
+	<result property="tag_id" column="tag_id" />
+	<result property="tag_content" column="tag_content"/>
+	<result property="user_id" column="user_id"/>
+	<result property="item_id" column="item_id"/>
+	</resultMap>
+	
+	<insert id="addOneRegisterUser" parameterClass="java.util.Map">
+		insert into t_user(user_email,user_password,user_nick,user_status,register_time)
+		values(#user_email#,#user_password#,#user_nick#,#user_status#,now())
+		<selectKey resultClass="int" keyProperty="id" >
+   			SELECT @@IDENTITY AS id
+   		</selectKey>
+	</insert>
+	<select id="getUserInfo" resultClass="user" parameterClass="java.util.Map">
+		select * from t_user where user_email = #user_email# and user_password = #user_password# limit 1;
+	</select>
+	
+	<select id="getUserInfoByUserId" resultClass="user" parameterClass="int">
+		select * from t_user where user_id=#user_id#
+	</select>
+	
+	<update id="updateUserStatus" parameterClass="java.util.Map">
+		update t_user set user_status = #user_status# where user_id = #user_id# limit 1;
+	</update>
+	
+	<update id="updateLoginTime" parameterClass="user">
+		update t_user set last_login_time = now() where user_id = #user_id# limit 1;
+	</update>
+	
+	<select id="checkUserEmailUnique" parameterClass="java.util.Map" resultClass="int">
+		select count(*) from t_user where user_email = #user_email# limit 1;
+	</select>
+	
+	<select id="checkUserNickUnique" parameterClass="java.util.Map" resultClass="int">
+		select count(*) from t_user where user_nick = #user_nick# limit 1;
+	</select>
+	
+	<select id="checkAnotherUserNickUnique" parameterClass="java.util.Map" resultClass="int">
+		select count(*) from t_user where user_nick = #user_nick# and user_id = #user_id#;
+	</select>
+	
+	<update id="modifyUserPassword" parameterClass="java.util.Map">
+		update t_user set user_password = #user_password# where user_id = #user_id# limit 1;
+	</update>
+	<select id="getUserInfoByEmail" parameterClass="java.util.Map" resultClass="user">
+		select * from t_user where user_email = #user_email# limit 1; 
+	</select>
+	
+	<insert id="addUserTag" parameterClass="java.util.Map">
+		insert into user_tag(tag_id,user_id) values(#tag_id#,#user_id#);
+	</insert>
+	
+	<insert id="addTagToLib" parameterClass="java.util.Map">
+		insert into tag_library(tag_content) values(#tag_content#)
+		<selectKey resultClass="int" keyProperty="id" >
+   			SELECT @@IDENTITY AS id
+   		</selectKey>
+	</insert>
+	
+	<delete id="delUserTags" parameterClass="java.util.Map">
+		delete from user_tag where user_tag.user_id = #user_id# and user_tag.tag_id in (select tag_library.tag_id from tag_library where tag_library.tag_content = #tag_content#);
+	</delete>
+	<select id="checkTagUnique" parameterClass="java.util.Map" resultClass="string">
+		select tag_id  from tag_library where tag_content = #tag_content# limit 1; 
+	</select>
+	
+	<select id="getUserRecommondTags" resultMap="getTagsResult">
+		select * from tag_library ORDER BY rand() LIMIT 10;
+	</select>
+	
+	<select id="getMyTags" parameterClass="java.util.Map" resultMap="getMyTagsResult">
+		select * from tag_library t1,user_tag t2 where t2.user_id = #user_id# and  t2.tag_id = t1.tag_id limit 0,10;
+	</select>
+	
+	<delete id="delMyTags" parameterClass="java.util.Map">
+		delete from user_tag where user_id = #user_id#;
+	</delete>
+	
+	<select id="checkBlackList" parameterClass="java.util.Map" resultClass="int">
+		select count(*) from black_list where user_id = $user_id$ and black_user_id = $black_user_id$ limit 1;
+	</select>
+	<insert id="addToBlackList" parameterClass="java.util.Map">
+		insert into black_list(user_id,black_user_id,black_user_name,add_time)
+		values(#user_id#,#black_user_id#,#black_user_name#,now())
+		<selectKey resultClass="int" keyProperty="id" >
+   			SELECT @@IDENTITY AS id
+   		</selectKey>
+	</insert>
+	
+	<delete id="removeUserFromBlackList" parameterClass="java.util.Map">
+		delete from black_list where user_id = #user_id# and black_user_id = #black_user_id# limit 1;
+	</delete>
+	
+	<select id="getBlackList" parameterClass="java.util.Map" resultClass="blackList">
+		select * from black_list where user_id = #user_id#;
+	</select>
+	
+	<select id="isOrNotAlreayInBlaclList" parameterClass="java.util.Map" resultClass="blackList">
+		select * from black_list where user_id = #user_id# and black_user_id=#black_user_id# limit 1;
+	</select>
+	
+	<update id="updateUserBasicInfo" parameterClass="java.util.Map">
+		update t_user 
+		set user_nick = #user_nick#,
+			user_name = #user_name#,
+			user_name_status = #user_name_status#,
+			user_address = #user_address#,
+			user_gender = #user_gender#,
+			user_birthday = #user_birthday#,
+			user_birthday_status = #user_birthday_status#
+		where user_id = #user_id# limit 1;
+	</update>
+	<insert id="addAppAuthInfo" parameterClass="java.util.Map">
+		insert into commenter_auth_info(user_id,comment_inner,comment_inner_links,comment_outer,comment_outer_links,weibo_or_zone,weibo_or_zone_links,application_status,application_date)
+		values(#user_id#,#comment_inner#,#comment_inner_links#,#comment_outer#,#comment_outer_links#,#weibo_or_zone#,#weibo_or_zone_links#,#application_status#,now());
+	</insert>
+	
+	<update id="updateSafeEmailByUserId" parameterClass="java.util.Map">
+		update t_user set safe_email = #safe_email# 
+		where user_id = #user_id# limit 1;
+	</update>
+	<!-- 更新用户图像 -->
+	<update id="uploadUserPortrait" parameterClass="java.util.Map">
+		update t_user set user_portrait=#user_portrait# where user_id=#user_id#
+	</update>
+	<select id="getAppAuthInfo" parameterClass="java.util.Map" resultClass="commenterAuthInfo">
+		select * from commenter_auth_info where user_id = #user_id# limit 1;
+	</select>
+	
+	<select id="checkTheSameSafeEmail" parameterClass="java.util.Map" resultClass="int">
+		select count(*) from t_user where safe_email = #safe_email# and user_id = #user_id#;
+	</select>
+	
+	<select id="checkUserEmailExistence" parameterClass="java.util.Map" resultClass="int">
+	  <![CDATA[    
+	   	select count(*) from t_user where user_email = #user_email# and user_status  <> 0;
+	   ]]> 
+	</select>
+</sqlMap>

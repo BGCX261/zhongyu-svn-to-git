@@ -1,0 +1,57 @@
+统计信息：
+          统计项为：推荐次数 ，回复次数,粉丝数量，私信数量,关注数量
+    
+          统计用户信息
+   	注册用户的时候，添加用户统计信息
+   	
+	Map<Object,Object> map=new HashMap<Object,Object>();
+	map.put("user_id", 123);
+	commonService.insertObject("common.insert_commonStat", map);
+	
+	
+	用户的关注数量加1
+	Map<Object,Object> map=new HashMap<Object,Object>();
+	map.put("user_id", 123);
+	CommonStat commonStat=commonService.selectObject("common.select_commonStat", map);
+	commonStat.setUser_attention_count(commonStat.getUser_attention_count()+1);
+	commonService.updateObject("common.updateUserAttention", commonStat);
+	
+	用户的粉丝数量加1
+	Map<Object,Object> map=new HashMap<Object,Object>();
+	map.put("user_id", 123);
+	CommonStat commonStat=commonService.selectObject("common.select_commonStat", map);
+	commonStat.setUser_fensi_count(commonStat.getUser_fensi_count()+1);
+	commonService.updateObject("common.updateUserFenSiCount", commonStat);
+	
+	用户的私信数量加1
+	Map<Object,Object> map=new HashMap<Object,Object>();
+	map.put("user_id", 123);
+	CommonStat commonStat=commonService.selectObject("common.select_commonStat", map);
+	commonStat.setUser_sixing_count(commonStat.getUser_sixing_count()+1);
+	commonService.updateObject("common.updateUserSixingCount", commonStat);
+	
+	用户的推荐数量加1
+	Map<Object,Object> map=new HashMap<Object,Object>();
+	map.put("user_id", 123);
+	CommonStat commonStat=commonService.selectObject("common.select_commonStat", map);
+	commonStat.setRecommend_count(commonStat.getRecommend_count()+1);
+	commonService.updateObject("common.updateRecommendCount", commonStat);
+	
+	用户的推荐数量减1
+	Map<Object,Object> map=new HashMap<Object,Object>();
+	map.put("user_id", 123);
+	CommonStat commonStat=commonService.selectObject("common.select_commonStat", map);
+	commonStat.setRecommend_count(commonStat.getRecommend_count()+1);
+	commonService.updateObject("common.updateRecommendCount", commonStat);
+	
+	按条件查询用户的统计信息，其它的类似
+	Map<Object,Object> map=new HashMap<Object,Object>();
+	map.put("user_id", 123);
+	CommonStat commonStat=commonService.selectObject("common.select_commonStat", map);
+	
+	
+	
+	
+	
+	
+	

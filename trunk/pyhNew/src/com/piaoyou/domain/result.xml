@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="result">
+	<typeAlias alias="commonInfo" type="com.piaoyou.domain.CommonInfo" />
+	<select id="getCommonList" parameterClass="map" resultClass="commonInfo">
+		select
+			distinct ci.*,tsi.site_name
+			from common_info ci 
+			join t_site_info tsi on tsi.id = ci.site_id
+			join common_time ct on ct.common_id = ci.id
+			join common_price cp on cp.common_id = ci.id
+			join t_city tc on tc.id = tsi.city_id
+			where
+			  ci.status in (0, 1, 9) and
+			  ci.type = 0 and
+			  ci.common_id_cor = 0
+			  <isNotEmpty property="show_name" prepend="and">
+			  	 ci.name like '%$show_name$%'
+			  </isNotEmpty>
+			  <!-- 
+			  <isEmpty property="show_name">
+			   -->
+			  	<isNotEmpty property="city_id" prepend="AND">
+			  	 tsi.city_id = #city_id#
+			  </isNotEmpty>
+			  <isNotEmpty property="show_type" prepend="AND">
+			  	ci.show_type = #show_type#
+			  </isNotEmpty>
+			  <isNotEmpty property="week" prepend="AND">
+			  	ct.week = #week#
+			  </isNotEmpty>
+			  <isNotEmpty property="start_time" prepend="AND">
+			  	 ct.common_time >= #start_time#
+			  </isNotEmpty>
+			  <isNotEmpty property="end_time" prepend="AND">
+			  	#end_time# > ct.common_time 
+			  </isNotEmpty>
+			  <isNotEqual property="min_price" compareValue="0" prepend="AND">
+			     cp.min_price >	#min_price#  
+			  </isNotEqual>
+			  <isNotEqual property="max_price" compareValue="0" prepend="AND">
+			  	#max_price# > cp.min_price
+			  </isNotEqual>
+			  <!-- 
+			  </isEmpty>
+			   -->
+			  limit #pageIndex#,#pageCount#
+	</select>
+	
+	<select id="getCommonTotalCount" parameterClass="map" resultClass="string">
+		select
+			count(distinct ci.id)
+			from common_info ci 
+			join t_site_info tsi on tsi.id = ci.site_id
+			join common_time ct on ct.common_id = ci.id
+			join common_price cp on cp.common_id = ci.id
+			join t_city tc on tc.id = tsi.city_id
+			where
+			  ci.status in (0, 1, 9) and
+			  ci.type = 0 and
+			  ci.common_id_cor = 0
+			  <isNotEmpty property="show_name" prepend="and">
+			  	 ci.name like '%$show_name$%'
+			  </isNotEmpty>
+			  <!-- 
+			  <isEmpty property="show_name">
+			   -->
+			  	<isNotEmpty property="city_id" prepend="AND">
+			  	 tsi.city_id = #city_id#
+			  </isNotEmpty>
+			  <isNotEmpty property="show_type" prepend="AND">
+			  	ci.show_type = #show_type#
+			  </isNotEmpty>
+			  <isNotEmpty property="week" prepend="AND">
+			  	ct.week = #week#
+			  </isNotEmpty>
+			  <isNotEmpty property="start_time" prepend="AND">
+			  	 ct.common_time >= #start_time#
+			  </isNotEmpty>
+			  <isNotEmpty property="end_time" prepend="AND">
+			  	#end_time# > ct.common_time 
+			  </isNotEmpty>
+			  <isNotEqual property="min_price" compareValue="0" prepend="AND">
+			     cp.min_price >	#min_price#  
+			  </isNotEqual>
+			  <isNotEqual property="max_price" compareValue="0" prepend="AND">
+			  	#max_price# > cp.min_price
+			  </isNotEqual>
+			  <!-- 
+			  </isEmpty>
+			   -->
+	</select>
+	
+	
+	<!-- 演出末级页 -->
+	<select id="getCommonInfoDetail" parameterClass="map" resultClass="commonInfo">
+		select ci.id,ci.name,ci.sub_name,ci.introduction,ci.show_type,ci.img_url,ci.heng_image_path,ci.shu_image_path,tsi.site_name,tc.city_name,tsi.site_map_coord,tc.id city_id,st.type_name
+		from common_info ci
+ 		 join t_site_info tsi on tsi.id = ci.site_id
+  		 join t_city tc on tc.id = tsi.city_id
+  		 join show_type st on st.id = ci.show_type
+    		and ci.id=#id#
+	</select>
+	
+</sqlMap>

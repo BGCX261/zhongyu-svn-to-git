@@ -1,0 +1,107 @@
+body#register{margin:0 auto;text-align:center;background:url(../images/register/bg.jpg) center top no-repeat;}
+#recontain{margin:100px auto 0 auto;padding:38px;width:828px;height:450px;text-align:left;background:url(../images/register/bg_regcon.png) center top no-repeat;}
+#recontain h1#reglogo{margin-bottom:30px;position:relative;}
+#recontain h1#reglogo a.reglogo{display:block;width:225px;height:47px;background:url(../images/register/reglogo.png) center top no-repeat;text-indent:-9999px;}
+#recontain #regarea{}
+#recontain #regarea #regl{float:left;display:inline;width:647px;border-right:1px dashed #ccc;}
+#recontain #regarea #regr{float:right;display:inline;margin-left:37px;width:139px;}
+#recontain #regarea #regl #regtab{margin-right:35px;height:63px;background:url(../images/register/tb_bgs.png) left bottom repeat-x;}
+#recontain #regarea #regl #regtab li{float:left;display:inline;margin-right:12px;}
+#recontain #regarea #regl #regtab li.last{margin-right:0;}
+#recontain #regarea #regl #regtab li a{float:left;width:255px;height:63px;background:url(../images/register/regtype.png) no-repeat;text-indent:-9999px;}
+#recontain #regarea #regl #regtab li a#dzyxzcs{margin-left:35px;background-position:0 0;}
+#recontain #regarea #regl #regtab li a#dzyxzcs.current{background-position:0 -66px;}
+#recontain #regarea #regl #regtab li a#dzyxzcs:hover{background-position:0 -66px;}
+#recontain #regarea #regl #regtab li a#sjhmzcs{background-position:-267px 0;}
+#recontain #regarea #regl #regtab li a#sjhmzcs.current{background-position:-267px -66px;}
+#recontain #regarea #regl #regtab li a#sjhmzcs:hover{background-position:-267px -66px;}
+#recontain #regarea form{margin:15px 0 0 35px;font-size:0.875em;}
+#recontain #regarea form label{float:left;padding:7px 0;margin-right:12px;width:123px;text-align:right;}
+#recontain #regarea form input{float:left;display:inline;}
+#recontain #regarea form input.textinput1{padding:7px 5px;border:1px solid #b9bec1;width:238px;color:#999;}
+#recontain #regarea form input.blacks{padding:7px 5px;border:1px solid #b9bec1;width:238px;color:#000;}
+#recontain #regarea form input.textinput2{margin-right:5px;padding:7px 5px;border:1px solid #b9bec1;width:93px;}
+#recontain #regarea form input#xieyi{margin-right:5px;width:13px;height:13px;}
+#recontain #regarea form em{position:absolute;left:392px;padding:7px 0;width:135px;min-height:16px;font-style:normal;word-wrap:break-word;font-size:0.857em;padding-left:27px;padding-right:20px;}
+#recontain #regarea form em.errortips{display:none;border:1px solid #e5c3c4;background:#ffeaea url(../images/register/icon_error.png) 7px 8px no-repeat;}
+#recontain #regarea form em.normaltips{display:none;border:1px solid #d8d1a3;background:#fffceb;}
+#recontain #regarea form em.oktips{display:none;background:url(../images/register/icon_correct.png) 7px 8px no-repeat;}
+#recontain #regarea form em.wrongtips{display:none;background:url(../images/register/icon_error.png) 7px 8px no-repeat;}
+#recontain #regarea form span{float:left;font-size:0.857em;}
+#recontain #regarea form span.strength{}
+#recontain #regarea form span.mmqd{background-color:#fff;width:35px;height:18px;line-height:18px;color:#808080;text-align:center;margin:6px 2px 0 0;font-size:1em;}
+#recontain #regarea form span.meght{margin-left:8px;}
+#recontain #regarea form span.ruo{background-color:#f37e3e;color:#fff;}
+#recontain #regarea form span.zhong{background-color:#f37e3e;color:#fff;}
+#recontain #regarea form span.qiang{background-color:#f37e3e;color:#fff;}
+#recontain #regarea form span.yzm{}
+#recontain #regarea form span.yzm img{float:left;}
+#recontain #regarea form span.yzm span.hyh{padding:7px 0;margin-left:5px;font-size:1em;cursor:pointer;color:#999;}
+#recontain #regarea form cite{margin-right:7px;font-style:normal;}
+#recontain #regarea form ul{}
+#recontain #regarea form ul li{margin:10px 0;position:relative;}
+#recontain #regarea form ul li.xieyim{margin-left:135px;padding:10px 0;}
+.required{color:#f00;}
+a.zhuce{display:block;width:168px;height:45px;background:url(../images/register/btn_register.png) no-repeat;text-indent:-9999px;}
+a.zhuce:hover{background-position:0 -46px;}
+#recontain #regarea #regr h2{margin:15px 0;font-size:0.75em;}
+#recontain #regarea #regr div#btnlogin{padding-bottom:15px;border-bottom:1px dotted #c2c0c0;}
+#recontain #regarea #regr div#btnlogin a{display:block;width:67px;height:28px;background:url(../images/register/icon_login.png) no-repeat 0 0;}
+#recontain #regarea #regr div#btnlogin a:hover{background-position:0 -29px;}
+#recontain #regarea #regr #wblogin{}
+#recontain #regarea #regr #wblogin li{margin:4px 0;}
+#recontain #regarea #regr .texttip{margin:10px 0;font-size:0.75em;color:#969696;line-height:20px;}
+
+/*登录*/
+#recontain h1#reglogo.loginbtm{margin-bottom:0;height:81px;background:url(../images/register/tb_bgs.png) left bottom repeat-x;}
+#recontain h1#reglogo a.loginlogo{display:block;width:225px;height:47px;background:url(../images/register/loginlogo.png) left top no-repeat;text-indent:-9999px;}
+#recontain h1#reglogo span.nomember{position:absolute;right:0;top:30px;font-size:0.75em;}
+#recontain h1#reglogo span.nomember a.mfzc{color:#315f81;}
+#recontain #regarea form#loginfm{margin-left:112px;padding-bottom:10px;}
+a.denglv{background:url(../images/register/btn_login.png) no-repeat;}
+span.forgetmm{padding:7px 0;margin-left:8px;color:#315f81;cursor:pointer;}
+#otherlogin{margin-left:112px;padding:30px 0;font-size:0.75em;border-top:1px dashed #afb1b0;}
+#otherlogin ul{}
+#otherlogin ul li{float:left;display:inline;margin:0 4px;height:30px;line-height:30px;}
+#otherlogin ul li a{float:left;}
+#otherlogin p{margin:12px 0 0 144px;color:#969696;}
+
+/*验证邮箱*/
+#recontain.yzyx{background:url(../images/register/bg1.png) no-repeat center top;width:708px;height:590px;}
+#recontain.resuccess{background:url(../images/register/bg_resuccess.png) no-repeat center top;width:708px;height:370px;}
+h1.membit{height:50px;background:url(../images/register/tb_bgs.png) left bottom repeat-x;}
+h1.membit span{float:left;width:72px;height:18px;background:url(../images/register/yzyx.png) no-repeat;text-indent:-9999px;}
+h1.membits span{background:url(../images/register/zccgtext.png) no-repeat;}
+#recontain #validcon{text-align:center;padding:18px;}
+#recontain #validcon p.sure{color:#424445;font-size:0.75em;margin-bottom:36px;line-height:14px;}
+#recontain #validcon p.sure span{display:inline-block;padding-left:20px;background:url(../images/register/icon_correct.png) left center no-repeat;}
+#recontain #validcon p.jihuo{color:#424445;font-size:1.5em;margin-bottom:32px;font-family:'微软雅黑',Microsoft YaHei,'宋体';}
+#recontain #validcon p.chengong{margin-top:50px;}
+#recontain #validcon p.chengong span{padding-left:41px;background:url(../images/register/gou3.png) no-repeat left center;}
+#recontain #validcon ul#sends{color:#424445;font-size:0.875em;margin-bottom:36px;}
+#recontain #validcon ul#sends li{line-height:24px;}
+#recontain #validcon #ljckyx{display:block;margin:0 auto 32px auto;width:188px;height:45px;background:url(../images/register/btn_ljckyx.png) no-repeat;text-indent:-9999px;}
+#recontain #validcon #ljckyx.ljckyx{background:url(../images/register/btn_enter.png) no-repeat;}
+#recontain #validcon #ljckyx:hover{background-position:0 -46px;text-decoration:none;}
+#recontain #validcon #fhsy{color:#fe5c09;}
+#recontain #validcon #attention{margin:0 auto 30px auto;width:593px;height:38px;line-height:38px;font-size:0.75em;color:424445;border:1px solid #d8d1a3;background-color:#fffceb;}
+#recontain #validcon #questioin{margin:0 auto;padding-top:30px;width:595px;text-align:left;color:#424445;border-top:1px dashed #99a5a1;}
+#recontain #validcon #questioin dt{margin-bottom:10px;font-size:0.875em;font-weight:bold;}
+#recontain #validcon #questioin dd{font-size:0.75em;height:24px;line-height:24px;}
+.mailsto{color:#315f81;}
+
+/*弹窗*/
+.tanchuang{display:none;width:404px;position:absolute;left:0;top:0;padding:5px;background:url(../images/bg_tc1.png) left top repeat;z-index:9999;text-align:left;}
+.bgwhite{background-color:#fff;}
+.tanchuang h4{position:relative;font-weight:bold;font-size:0.875em;color:#27292b;padding-left:10px;height:36px;line-height:36px;background:url(../images/bg_tctop.png) left top repeat-x;}
+.tanchuang h4 span.close{position:absolute;right:15px;top:10px;width:9px;height:9px;background:url(../images/icon_close1.png) no-repeat;cursor:pointer;}
+.tanchuang div.regpopwin{padding:20px;font-size:0.875em;color:#666;}
+.tanchuang p.suretext{padding-left:42px;background:url(../images/lvgou.png) no-repeat left center;height:30px;line-height:30px;}
+.tanchuang p.jingzhi{background:url(../images/pop_cha.png) no-repeat left center;}
+.tanchuang p.gangtan{background:url(../images/pop_tanhao.png) no-repeat left center;}
+.tanchuang .btnlist{margin:20px 0;}
+.tanchuang .btnlist a{float:left;width:61px;height:28px;text-indent:-9999px;}
+.tanchuang .btnlist a.popsure{margin-left:120px;background:url(../images/popbtn_sure.png) no-repeat center center;}
+.tanchuang .btnlist a.mlmore{margin-left:150px;}
+.tanchuang .btnlist a.popcancle{background:url(../images/popbtn_cancle.png) no-repeat center center;}
+.tanchuang .btnlist a:hover{text-decoration:none;}

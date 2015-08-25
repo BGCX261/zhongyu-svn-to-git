@@ -1,0 +1,742 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="common">
+	<typeAlias alias="userRecommend" type="com.piaoyou.domain.UserRecommend" />
+	<typeAlias alias="userCollection" type="com.piaoyou.domain.UserCollection" />
+	<typeAlias alias="commonStat" type="com.piaoyou.domain.CommonStat" />
+	<typeAlias alias="userPrivateLetter" type="com.piaoyou.domain.UserPrivateLetter" />
+	<typeAlias alias="userAttention" type="com.piaoyou.domain.UserAttention" />
+	<typeAlias alias="user" type="com.piaoyou.domain.User" />
+	<typeAlias alias="userVermicelli" type="com.piaoyou.domain.UserVermicelli" />
+	<typeAlias alias="blackList" type="com.piaoyou.domain.BlackList" />
+	<typeAlias alias="remarkRecommend" type="com.piaoyou.domain.RemarkRecommend" />
+	<typeAlias alias="remarkCollect" type="com.piaoyou.domain.RemarkCollect" />
+	
+	<!-- 					
+								推荐信息 												
+	-->
+	<!-- 添加推荐 -->
+	<insert id="insertRecommend" parameterClass="userRecommend">
+		insert into
+		user_recommend(common_id,user_id,create_date,recommend_reason,location_url)
+		values(#common_id#,#user_id#,now(),#recommend_reason#,#location_url#)
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+   		</selectKey>
+	</insert>
+	
+	<!-- 删除推荐 -->
+	<delete id="delete_Recommend" parameterClass="java.util.Map">
+		delete from user_recommend where common_id=#common_id# and
+		user_id=#user_id#
+	</delete>
+
+	<!-- 判断用户是否已经推荐过 -->
+	<select id="isAlreayRecommend" parameterClass="java.util.Map"
+		resultClass="userRecommend">
+		select * from user_recommend where common_id=#common_id#
+		and user_id=#user_id#
+	</select>
+
+	<!-- 查询推荐 -->
+	<select id="selectRecommendByUserId" parameterClass="java.util.Map"
+		resultClass="userRecommend">
+		SELECT
+		ur.id,
+		ur.common_id,
+		ur.user_id,
+		date_format(ur.create_date,'%Y.%m.%d') as create_date,
+		ur.location_url ,
+		ur.recommend_reason,
+		ci.name_clean as name_clean ,
+		ci.introduction as introduction ,
+		ci.img_url as img_url,
+		(case when ci.status=0 then "预售" when ci.status=1 then "热销" else "过期" end)
+		as status,
+		(CASE WHEN ci.site_id=0 THEN "" ELSE (select site_name from t_site_info tsi
+		where tsi.id=ci.site_id) END) as siteName,
+		ct.common_time as common_time,
+		cp.price as price
+		FROM
+		user_recommend ur
+		left JOIN common_info ci ON ur.common_id
+		= ci.id
+		left JOIN common_time ct ON ci.id = ct.common_id
+		left JOIN
+		common_price cp ON ct.common_id = cp.common_id
+		where 1=1
+		and
+		ur.user_id=#user_id#
+		GROUP BY ur.common_id
+		<!-- 按照演出日期排序 -->
+		<isEqual property="flag" compareValue="1">
+			ORDER BY common_time
+			desc 
+		</isEqual>
+		<!-- 按照收藏日期排序 -->
+		<isEqual property="flag" compareValue="0">
+			ORDER BY ur.create_date
+			desc 
+		</isEqual>
+		limit #pageIndex# , #pageCount#
+	</select>
+
+	<!--查看演出的头两2条推荐-->
+	<select id="selectRecommendByCommonIdTwo" parameterClass="java.util.Map"
+		resultClass="userRecommend">
+		SELECT
+		ur.id,
+		ur.common_id,
+		ur.user_id,
+		date_format(ur.create_date,'%Y.%m.%d') as create_date,
+		ur.location_url ,
+		ur.recommend_reason,
+		tu.user_nick as user_name,
+		tu.user_portrait
+		FROM
+		user_recommend ur
+		left JOIN t_user tu ON ur.user_id =tu.user_id
+		where 1=1
+		and ur.common_id=#id#
+		order by ur.create_date desc
+		limit 2
+	</select>
+
+	<!-- 根据用户id查看前3条推荐 -->
+	<select id="getUserRecommdByUserId3" parameterClass="java.util.Map"
+		resultClass="userRecommend">
+		SELECT * from user_recommend ur where ur.user_id=#user_id# order by
+		ur.create_date desc limit 3
+    </select>
+
+
+	<!-- 查询演出的推荐次数 -->
+	<select id="selectRecommendByCommonIdCount" parameterClass="java.util.Map"
+		resultClass="int">
+		SELECT
+		count(*)
+		FROM
+		user_recommend ur
+		where 1=1
+		and ur.common_id=#id#
+    </select>
+
+	<!-- 查询用户推荐的总数 -->
+	<select id="selectRecommendCountByUserId" parameterClass="java.util.Map"
+		resultClass="int">
+		<!--
+			select count(*) from (SELECT 1 FROM user_recommend ur left JOIN
+			common_info ci ON ur.common_id = ci.id where 1=1 and
+			ur.user_id=#user_id# GROUP BY ur.common_id) as z
+		-->
+		select count(*) from user_recommend ur where ur.user_id=#user_id#
+	</select>
+
+	<!-- 
+										收藏信息
+	 -->
+	<!-- 添加收藏 -->
+	<insert id="insertCollection" parameterClass="userCollection">
+		insert into
+		user_collection(common_id,user_id,create_date,location_url)
+		values(#common_id#,#user_id#,now(),#location_url#)
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+   		</selectKey>
+	</insert>
+
+	<!-- 判断是否已经收藏过-->
+	<select id="isAlreadyCollect" parameterClass="java.util.Map"
+		resultClass="userCollection">
+		select * from user_collection where common_id=#common_id#
+		and user_id=#user_id#
+	</select>
+	<!-- 删除收藏 -->
+	<delete id="delete_collection" parameterClass="java.util.Map">
+		delete from user_collection where common_id=#common_id# and
+		user_id=#user_id#
+	</delete>
+
+	<!-- 查询收藏 -->
+	<select id="selectCollectionByUserId" parameterClass="java.util.Map"
+		resultClass="userCollection">
+		SELECT
+		uc.id,
+		uc.common_id,
+		uc.user_id,
+		date_format(uc.create_date,'%Y.%m.%d') as create_date,
+		uc.location_url ,
+		ci.name_clean as name_clean ,
+		ci.introduction as introduction ,
+		ci.img_url as img_url,
+		(case when ci.status=0 then "预售" when ci.status=1 then "热销" else "过期" end)
+		as status,
+		(CASE WHEN ci.site_id=0 THEN "" ELSE (select site_name from t_site_info tsi
+		where tsi.id=ci.site_id) END) as siteName,
+		ct.common_time as common_time,
+		cp.price as price
+		FROM
+		user_collection uc
+		left JOIN common_info ci ON
+		uc.common_id = ci.id
+		left JOIN common_time ct ON ci.id = ct.common_id
+		left JOIN common_price cp ON ct.common_id = cp.common_id
+		where 1=1
+		and
+		uc.user_id=#user_id#
+		GROUP BY uc.common_id
+		<!-- 按照演出日期排序 -->
+		<isEqual property="flag" compareValue="1">
+			ORDER BY common_time
+			desc 
+		</isEqual>
+		<!-- 按照收藏日期排序 -->
+		<isEqual property="flag" compareValue="0">
+			ORDER BY uc.create_date
+			desc 
+		</isEqual>
+		limit #pageIndex# , #pageCount#
+	</select>
+
+	<!-- 查询收藏的总数 -->
+	<select id="selectCollectionCountByUserId" parameterClass="java.util.Map"
+		resultClass="int">
+		select count(*) from user_collection uc where uc.user_id=#user_id#
+    </select>
+
+	<!-- 针对右下角的收藏 -->
+	<select id="selectCollectionRightByUserId" parameterClass="int"
+		resultClass="userCollection">
+		select id,common_id from user_collection uc where uc.user_id=#value#
+	</select>
+
+	<select id="selectCollectionCenterByUserId" parameterClass="map"
+		resultClass="userCollection">
+		select A.id,A.common_id,B.show_type from user_collection A join common_info
+		B on A.common_id=B.id where A.user_id=#user_id#
+    </select>
+
+	<!-- 
+    							 统计信息
+      -->
+	<!-- 添加统计信息 -->
+	<insert id="insert_commonStat" parameterClass="java.util.Map">
+		insert into common_stat(user_id)
+		values(#user_id#)
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+   	</selectKey>
+	</insert>
+	<!--获取统计信息  -->
+	<select id="select_commonStat" parameterClass="java.util.Map"
+		resultClass="commonStat">
+		select * from common_stat cs
+		where 1=1
+		and cs.user_id=#user_id#
+    </select>
+	<!--更新用户推荐数量  -->
+	<update id="updateRecommendCount" parameterClass="commonStat">
+		update common_stat set recommend_count=#recommend_count# where 1=1 and
+		user_id=#user_id#
+    </update>
+
+	<!-- 更新用户评论数量 -->
+	<update id="updateReplyCount" parameterClass="commonStat">
+		update common_stat set reply_count=#reply_count# where 1=1 and
+		user_id=#user_id#
+    </update>
+	<!-- 更新用户粉丝数量 -->
+	<update id="updateUserFenSiCount" parameterClass="commonStat">
+		update common_stat set user_fensi_count=#user_fensi_count# where 1=1 and
+		user_id=#user_id#
+    </update>
+	<!-- 更新用户私信数量 -->
+	<update id="updateUserSixingCount" parameterClass="commonStat">
+		update common_stat set user_sixing_count=#user_sixing_count# where 1=1 and
+		user_id=#user_id#
+    </update>
+	<!-- 更新用户关注数量 -->
+	<update id="updateUserAttention" parameterClass="commonStat">
+		update common_stat set user_attention_count=#user_attention_count# where 1=1
+		and user_id=#user_id#
+    </update>
+	<!-- 更新用户收藏数量 -->
+	<update id="updateUserCollection" parameterClass="commonStat">
+		update common_stat set user_collect_count=#user_collect_count# where 1=1 and
+		user_id=#user_id#
+    </update>
+
+	<!-- 获取用户的统计信息 -->
+	<select id="selectUserInfoByUserId" parameterClass="int"
+		resultClass="commonStat">
+		select * from common_stat where common_stat.user_id=#value# limit 1
+    </select>
+	<!-- 
+										用户私信 
+    -->
+	<!-- 发送私信 -->
+	<insert id="insertPrivateLetter" parameterClass="userPrivateLetter">
+		insert into
+		user_private_letter(from_user_id,to_user_id,send_date,send_info,send_title,from_delete,to_delete,group_user)
+		values(#from_user_id#,#to_user_id#,now(),#send_info#,#send_title#,#from_delete#,#to_delete#,#group_user#)
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+   		</selectKey>
+	</insert>
+
+
+	<!-- 用户收到的私信 -->
+	<select id="selectGetPrivateLetter" parameterClass="java.util.Map"
+		resultClass="userPrivateLetter">
+		select t1.*, date_format(t1.send_date,'%m月%d日 %H:%i') as
+		show_date,t2.count,u.user_nick as user_nick,u.user_portrait as
+		user_portrait from user_private_letter t1 ,(select max(t2.id) as id,
+		count(*) as count from user_private_letter t2 where
+		(t2.from_user_id=#user_id# and t2.from_delete !=1 )or (t2.to_user_id=#user_id# and
+		t2.to_delete!=1) GROUP BY t2.group_user) t2,t_user u where t2.id=t1.id
+		and t1.from_user_id=u.user_id order by t1.send_date desc
+		limit #pageIndex# , #pageCount#
+    </select>
+
+	<!-- 查询用户收到的私信的总数量 -->
+	<select id="selectGetPrivateLetterCount" parameterClass="java.util.Map"
+		resultClass="int">
+		select count(*) from (select t1.*, date_format(t1.send_date,'%m月%d日 %H:%i')
+		as show_date,t2.count,u.user_nick as user_nick,u.user_portrait as
+		user_portrait from user_private_letter t1 ,(select max(t2.id) as id,
+		count(*) as count from user_private_letter t2 where
+		(t2.from_user_id=#user_id# and t2.from_delete !=1 )or (t2.to_user_id=#user_id# and
+		t2.to_delete!=1) GROUP BY t2.group_user) t2,t_user u where t2.id=t1.id
+		and t1.from_user_id=u.user_id ) tmp
+    </select>
+    
+    	<select id="selectGetPrivateLetterCount2" parameterClass="java.util.Map"
+		resultClass="int">
+		select count(*) from (select t1.*, date_format(t1.send_date,'%m月%d日 %H:%i')
+		as show_date,t2.count,u.user_nick as user_nick,u.user_portrait as
+		user_portrait from user_private_letter t1 ,(select max(t2.id) as id,
+		count(*) as count from user_private_letter t2 where
+		t2.to_user_id=#user_id# and t2.to_delete!=1 GROUP BY t2.group_user) t2,t_user u where t2.id=t1.id
+		and t1.from_user_id=u.user_id and t1.is_read=0 ) tmp
+    </select>
+
+	<select id="selectLetterOpenByGroup" parameterClass="map"
+		resultClass="userPrivateLetter">
+
+		SELECT
+		t2.*,u.user_nick as user_nick,u.user_portrait as
+		user_portrait,date_format(t2.send_date,'%m月%d日 %H:%i') as show__date
+		FROM
+		user_private_letter t2,t_user u
+		WHERE
+		((
+		t2.from_user_id =#user_id#
+		AND t2.from_delete != 1
+		)
+		OR(
+		t2.to_user_id =#user_id#
+		AND t2.to_delete != 1
+		) ) and t2.group_user = #group_user#
+		and u.user_id = t2.from_user_id order by send_date desc limit
+		#pageIndex#,#pageCount#
+
+		
+	</select>
+
+	<select id="selectLetterOpenByGroupCount" parameterClass="map"
+		resultClass="int">
+		select count(*) from (
+		SELECT
+		t2.*,u.user_nick as user_nick,u.user_portrait as
+		user_portrait,date_format(t2.send_date,'%m月%d日 %H:%i') as show__date
+		FROM
+		user_private_letter t2,t_user u
+		WHERE
+		((
+		t2.from_user_id =#user_id#
+		AND t2.from_delete != 1
+		)
+		OR(
+		t2.to_user_id =#user_id#
+		AND t2.to_delete != 1
+		) ) and t2.group_user = #group_user#
+		and u.user_id = t2.from_user_id) tmp
+
+		
+	</select>
+	
+	<delete id="batchDeleteLetterFrom"  parameterClass ="userPrivateLetter">
+		update user_private_letter set from_delete=1 where from_user_id = #from_user_id# and to_user_id= #to_user_id#
+	</delete>
+	<delete id="batchDeleteLetterTo"  parameterClass ="userPrivateLetter">
+		update user_private_letter set to_delete=1 where from_user_id = #to_user_id# and to_user_id= #from_user_id#
+	</delete>
+	<update id="updateLetter" parameterClass="userPrivateLetter">
+		update user_private_letter set is_read=1 where id=#id#
+	</update>
+
+	<!-- 查询用户发送的私信 -->
+	<select id="selectSendPrivateLetter" parameterClass="java.util.Map"
+		resultClass="userPrivateLetter">
+		select upl.* ,tu.user_name,tu.user_portrait from user_private_letter upl
+		left join t_user tu on upl.from_user_id=tu.user_id
+		where 1=1
+		and upl.from_delete=0
+		and upl.from_user_id=#user_id#
+		order by upl.send_date desc
+		limit #pageIndex# , #pageCount#
+    </select>
+	<!-- 查询用户发送的私信的总数量 -->
+	<select id="selectSendPrivateLetterCount" parameterClass="java.util.Map"
+		resultClass="int">
+		select count(*) from user_private_letter upl
+		where 1=1
+		and upl.from_delete=0
+		and upl.from_user_id=#user_id#
+    </select>
+
+
+	<!-- 查询一条私信的详细信息 -->
+	<select id="getUserPrivateLetterById" parameterClass="int"
+		resultClass="userPrivateLetter">
+		select * from user_private_letter where id=#value#
+   	</select>
+	<!-- 发送用户删除用户私信 -->
+	<update id="delLetterFromSendUser" parameterClass="int">
+		update user_private_letter set from_delete=1 where id=#value#
+   	</update>
+
+	<!--收到用户用户删除用户私信 -->
+	<update id="delLetterFromGetUser" parameterClass="int">
+		update user_private_letter set to_delete=1 where id=#value#
+   	</update>
+
+	<!-- 
+										关注用户
+	 -->
+	<!-- 添加关注用户 -->
+	<insert id="insert_attention_user" parameterClass="userAttention">
+		insert into
+		user_attention(user_id,attention_id,create_date,is_read)values
+		(#user_id#,#attention_id#,#create_date#,#is_read#)
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+ 	</selectKey>
+	</insert>
+
+	<!-- 查询关注 -->
+	<select id="select_user_attention" parameterClass="java.util.Map"
+		resultClass="userAttention">
+		SELECT
+		ua.id,
+		ua.user_id,
+		ua.attention_id,
+		ua.create_date,
+		ua.is_read,
+		tu.user_nick as user_name,
+		tu.user_portrait,
+		tu.user_address,
+		cs.recommend_count,
+		cs.reply_count,
+		cs.user_fensi_count
+		FROM
+		user_attention ua
+		LEFT JOIN t_user tu ON ua.attention_id = tu.user_id
+		left join common_stat cs on tu.user_id=cs.user_id
+		where ua.user_id=#user_id#
+		and ua.is_read=0
+		order by ua.create_date desc
+		limit #pageIndex# , #pageCount#
+	</select>
+
+	<select id="selectAllFensiByfalse" parameterClass="java.util.Map"
+		resultClass="userAttention">
+		SELECT
+		uv.id,
+		uv.vermicelli_id as attention_id,
+		uv.user_id,
+		uv.create_date,
+		tu.user_nick as user_name,
+		tu.user_portrait,
+		tu.user_address,
+		cs.recommend_count,
+		cs.reply_count,
+		cs.user_fensi_count
+		FROM
+		user_vermicelli uv
+		LEFT JOIN t_user tu ON uv.vermicelli_id =
+		tu.user_id
+		left join common_stat cs on tu.user_id=cs.user_id
+		where
+		uv.user_id=#user_id#
+		order by uv.create_date desc
+		limit #pageIndex# ,
+		#pageCount#
+	</select>
+
+	<!--查询用户关注的总数 -->
+	<select id="select_user_attention_count" parameterClass="java.util.Map"
+		resultClass="int">
+		SELECT
+		count(*)
+		FROM
+		user_attention ua
+		where ua.user_id=#user_id#
+		and ua.is_read=0
+	</select>
+
+	<!-- 判断是否关注过此用户 -->
+	<select id="AttentionOrNotThisUser" parameterClass="java.util.Map"
+		resultClass="userAttention">
+		SELECT * from user_attention t where t.user_id=#user_id#
+		and t.attention_id=#attention_id#
+	</select>
+
+	<!-- 取消关注 -->
+	<update id="cancelAttention" parameterClass="java.util.Map">
+		update user_attention set is_read=1 where user_id=#user_id# and
+		attention_id=#attention_id#
+	</update>
+
+	<!-- 重新关注 -->
+	<update id="againAttention" parameterClass="java.util.Map">
+		update user_attention set is_read=0,create_date=now() where
+		user_id=#user_id# and attention_id=#attention_id#
+	</update>
+
+	<!-- 共同关注的人 -->
+	<select id="select_same_attention" parameterClass="java.util.Map"
+		resultClass="user">
+		select ua.user_id ,tu.user_nick as user_name from (
+		select attention_id as
+		user_id from user_attention A where A.user_id=#user_id#
+		and exists (select 1 from user_attention where
+		user_id=#user_attention_id# and A.attention_id=attention_id )
+		) as ua
+		left join t_user tu on ua.user_id = tu.user_id
+	</select>
+
+	<!-- 我关注的人中也关注了他的 -->
+	<select id="selectFromMeAlsoHe" parameterClass="java.util.Map"
+		resultClass="user">
+		select ua.attention_id as user_id ,tu.user_nick as user_name from (
+		SELECT attention_id FROM user_attention A WHERE A.user_id = #user_id#
+		AND EXISTS( SELECT 1 FROM user_attention B WHERE B.attention_id
+		=#user_attention_id# and A.attention_id=B.user_id)
+		) as ua left join t_user tu on ua.attention_id= tu.user_id
+	</select>
+
+	<!-- 
+									粉丝
+	 -->
+
+	<!-- 成为..的粉丝 -->
+	<insert id="insert_fensi" parameterClass="userVermicelli">
+		insert into
+		user_vermicelli(vermicelli_id,user_id,create_date)values(#vermicelli_id#,#user_id#,now())
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+	 	</selectKey>
+	</insert>
+	<!-- 判断是否已经成为..的粉丝 -->
+	<select id="isAreadyfensi" parameterClass="java.util.Map"
+		resultClass="userVermicelli">
+		select * from user_vermicelli where
+		vermicelli_id=#vermicelli_id# and user_id=#user_id#
+	</select>
+
+	<!-- 查询用户的所有粉丝 -->
+	<select id="selectAllFensi" parameterClass="java.util.Map"
+		resultClass="userVermicelli">
+		SELECT
+		uv.id,
+		uv.vermicelli_id,
+		uv.user_id,
+		uv.create_date,
+		tu.user_name,
+		tu.user_portrait,
+		cs.recommend_count,
+		cs.reply_count,
+		cs.user_fensi_count
+		FROM
+		user_vermicelli uv
+		LEFT JOIN t_user tu ON uv.vermicelli_id =
+		tu.user_id
+		left join common_stat cs on tu.user_id=cs.user_id
+		where
+		uv.user_id=#user_id#
+		order by uv.create_date desc
+		limit #pageIndex# ,
+		#pageCount#
+	</select>
+	<!-- 查询粉丝的数量 -->
+	<select id="selectAllFensiCount" parameterClass="java.util.Map"
+		resultClass="int">
+		select count(*) from user_vermicelli where
+		user_id=#user_id# 
+	</select>
+
+	<!-- 
+					统计演出的推荐数量
+	 -->
+	<select id="selectCommonRecommendCount" parameterClass="int"
+		resultClass="int">
+		select recommend_count from common_info where id=#value#
+	</select>
+
+	<!-- 更改演出,电影,团购的推荐数量 -->
+	<update id="updateCommonCount" parameterClass="java.util.Map">
+		update common_info
+		set recommend_count=#recommend_count# where id=#common_id#
+	</update>
+	<!-- 举报 -->
+	<insert id="insert_jubao" parameterClass="java.util.Map">
+		insert into
+		t_jubao(content_id,jubao_user_id,user_id,jubao_content,type,createdate)values(#content_id#,#jubao_user_id#,#user_id#,#jubao_content#,#type#,now())
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY AS id
+	 	</selectKey>
+	</insert>
+	
+
+	<!-- 获取所有有演出的城市 -->
+	<select id="getCityListByShow" parameterClass="map" resultClass="commonInfo">
+		select tc.id city_id ,tc.city_name ,count(tc.id) count
+		from
+		t_city tc
+		join t_site_info tsi
+		on tsi.city_id = tc.id
+		join common_info ci
+		on ci.site_id = tsi.id and
+		ci.status in (0, 1, 9)
+		and ci.type = 0
+		group by
+		tc.id
+		order by
+		count desc,tc.id asc
+		</select>
+
+	<!-- 用户推荐，根据演出id获取用户推荐语 -->
+	<select id="getUserRecommenByShowId" parameterClass="map"
+		resultClass="userRecommend">
+		select A.common_id,A.user_id,A.recommend_reason,A.location_url,B.user_nick
+		from user_recommend A join t_user B on A.user_id=B.user_id where
+		A.common_id=#common_id# order by A.create_date desc limit #pageIndex#,#pageCount#
+	</select>
+
+	<select id="isHistoryIsExist" parameterClass="map" resultClass="string">
+		select count(1) from history where user_id = #user_id# and common_id =
+		#common_id#
+	</select>
+
+	<insert id="insertHistory" parameterClass="commonInfo">
+		insert into
+		history(user_id,common_id) value(#user_id#,#id#)
+	</insert>
+
+
+	<select id="getHistoryList" parameterClass="map" resultClass="commonInfo">
+		select ci.*,tsi.site_name from common_info ci join history h on
+		h.common_id = ci.id join t_site_info tsi on tsi.id = ci.site_id and
+		h.user_id = #user_id#
+
+		<isNotEmpty property="showName" prepend="and">
+			ci.name like '%$showName$%'
+		</isNotEmpty>
+
+		<isEmpty property="showName">
+			<isNotEmpty property="type" prepend="and">
+				ci.show_type=#type#
+			</isNotEmpty>
+		</isEmpty>
+		limit #pageIndex#,#pageCount#
+	</select>
+	<select id="getHistoryCount" parameterClass="map" resultClass="string">
+		select count(1) from common_info ci join history h on h.common_id =
+		ci.id join t_site_info tsi on tsi.id = ci.site_id and h.user_id =
+		#user_id#
+		<isNotEmpty property="showName" prepend="and">
+			ci.name like '%$showName$%'
+		</isNotEmpty>
+		<isEmpty property="showName">
+			<isNotEmpty property="type" prepend="and">
+				ci.show_type=#type#
+			</isNotEmpty>
+		</isEmpty>
+	</select>
+
+	<delete id="delete_history" parameterClass="map">
+		delete from history
+		where user_id = #user_id# and common_id = #common_id#
+	</delete>
+
+	<select id="isOrNotAlreayInBlaclList" parameterClass="map"
+		resultClass="blackList">
+		select * from black_list where user_id=#user_id# and
+		black_user_id=#black_user_id# limit 1
+	</select>
+	
+	
+	
+	
+	
+	<!-- 剧评  推荐和收藏的  添加，获取  -->
+	 
+	<select id="getRemarkRecommendList" parameterClass="map" resultClass="remarkRecommend">
+		select rr.* ,tu.user_nick from remark_recommend rr join t_user tu on tu.user_id = rr.user_id 
+		<isNotEmpty property="user_id" prepend="and">
+			rr.user_id = #user_id#
+		</isNotEmpty>
+		<isNotEmpty property="remark_id" prepend="and">
+			rr.remark_id = #remark_id#
+		</isNotEmpty>
+		order by rr.create_date desc
+		limit #pageIndex#,#pageCount#
+	</select>
+	
+	<select id="getRemarkRecommendCount" parameterClass="map" resultClass="string">
+		select count(1) from remark_recommend rr join t_user tu on tu.user_id = rr.user_id
+		<isNotEmpty property="user_id" prepend="and">
+			rr.user_id = #user_id#
+		</isNotEmpty>
+		<isNotEmpty property="remark_id" prepend="and">
+			rr.remark_id = #remark_id#
+		</isNotEmpty>
+	</select>
+	
+	<insert id="addRemarkRecommend" parameterClass="remarkRecommend">
+		insert into remark_recommend(remark_id,user_id,create_date,recommend_reason) 
+		values(#remark_id#,#user_id#,now(),#recommend_reason#)
+	</insert>
+	
+		<update id="updateRemarkRecommendCount" parameterClass="remarkRecommend">
+			update content_remark set r_num=r_num+1 where id=#remark_id#
+		</update>
+	
+	
+	<select id="getRemarkCollectList" parameterClass="map" resultClass="remarkCollect">
+		select rc.* ,cr.title from remark_collect rc join content_remark cr on cr.id = rc.remark_id 
+		<isNotEmpty property="user_id" prepend="and"> 
+			 rc.user_id = #user_id#
+		</isNotEmpty>
+		<isNotEmpty property="remark_id" prepend="and">
+			rc.remark_id = #remark_id#
+		</isNotEmpty>
+	</select>
+	
+	<insert id="addRemarkCollect" parameterClass="remarkCollect">
+		insert into remark_collect(user_id,remark_id,create_date) values(#user_id#,#remark_id#,now())
+	</insert>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</sqlMap>

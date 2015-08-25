@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="remark">
+	<typeAlias alias="commentrelpy" type="com.piaoyou.domain.CommentReply" />
+	<typeAlias alias="commoncomment" type="com.piaoyou.domain.CommonComment" />
+	<typeAlias alias="contentremark" type="com.piaoyou.domain.ContentRemark" />
+	<typeAlias alias="remarkreply" type="com.piaoyou.domain.RemarkReply" />
+	
+	<!-- 添加评论 -->
+	<insert id="insert_commoncomment" parameterClass="commoncomment">
+		insert into common_comment(common_id,comment_user_id,reply_user_id,comment_info,comment_date)
+		values(#common_id#,#comment_user_id#,#reply_user_id#,#comment_info#,now())
+		<selectKey resultClass="int" keyProperty="id" >
+   			SELECT @@IDENTITY AS id
+   		</selectKey>
+	</insert>
+	<!-- 删除评论 -->
+	<delete id="delete_commoncomment" parameterClass="int">
+		delete from common_comment where id=#value#
+	</delete>
+	
+	<!-- 查询用户的前3条评论 -->
+	<select id="getCommentByUserId3"  parameterClass="java.util.Map"  resultClass="commoncomment">
+		select * from common_comment  A 
+		where A.comment_user_id=#user_id#
+		order by A.comment_date desc limit 3 
+	</select>
+	
+	<select id="getCommentById" parameterClass="int" resultClass="commoncomment">
+		select * from common_comment where id=#value#
+	</select>
+	
+	<!-- 修改评论的回复数 -->
+	<update id="updateReplyCount" parameterClass="java.util.Map">
+			update common_comment set reply_count=#reply_count# where id=#id#
+	</update>
+	
+	<!--根据common_id查询 演出或者电影或者团购的评论-->
+	
+	<select id="selectCommonCommenttByCommonId" parameterClass="java.util.Map" resultClass="commoncomment">
+			select A.id,A.common_id,A.comment_user_id,A.comment_info,DATE_FORMAT(A.comment_date,'%m月%d日 %H:%i') as comment_date ,A.reply_user_id ,A.reply_count,B.user_nick as user_name,B.user_portrait from common_comment A ,t_user B where A.comment_user_id=B.user_id
+		and A.common_id=#common_id#
+	    ORDER BY A.comment_date desc 
+	    limit #pageIndex# , #pageCount#
+	</select>
+	<!-- 统计演出或者电影或者团购的评论个数 -->
+	<select id="selectCommonCommenttCountByCommonId" parameterClass="java.util.Map" resultClass="int">
+		select count(1) from common_comment A 
+		where A.common_id=#common_id#
+	</select>
+	
+	<!-- 
+	   							针对影评这一块
+	 -->
+	 
+	<!-- 添加影评 -->
+	<insert id="insert_contentremark" parameterClass="contentremark">
+		insert into content_remark(common_id,user_id,title,content,create_date,level)
+		values(#common_id#,#user_id#,#title#,#content#,now(),#level#)
+		<selectKey resultClass="int" keyProperty="id" >
+   			SELECT @@IDENTITY AS id
+   		</selectKey>
+	</insert>
+	
+	<!-- 删除影评 -->
+	<delete id="delete_contentremark">
+		delete from content_remark where id=#value#
+	</delete>
+	<!--根据影评的id查影评  -->
+	<select id="selectContentRemarkById" parameterClass="int" resultClass="contentremark">
+		select * from content_remark where id=#value#
+	</select>
+	
+	<!-- 修改影评的浏览数量 -->
+	<update id="updateContentRemarkByid" parameterClass="contentremark">
+		update content_remark set b_num=b_num+1 where id=#id#
+	</update>
+	
+	
+	<!-- 查看用户的前三条剧评 -->
+	<select id="selectContentRemarkByUserIdThree" parameterClass="java.util.Map" resultClass="contentremark">
+		select A.id,A.common_id,A.user_id,A.title,A.content,DATE_FORMAT(A.create_date,'%m月%d日 %H:%i') as create_date,A.level,A.is_recommend,(SELECT count(*) from remak_reply where remak_reply.remark_id=A.id) as replyCount ,A.b_num from content_remark A 
+		where A.user_id=#user_id#
+		order by A.create_date desc
+	    limit 3
+	</select>	
+	
+	<!--根据common_id查询 演出或者电影或者团购的影评-->
+	
+	
+	
+	<select id="selectContentRemarkByCommonId" parameterClass="java.util.Map" resultClass="contentremark">
+		select A.id,A.common_id,A.user_id,A.title,A.content,DATE_FORMAT(A.create_date,'%m月%d日 %H:%i') as create_date,A.level,A.is_recommend,(SELECT count(*) from remak_reply where remak_reply.remark_id=A.id) as replyCount ,B.user_nick as user_name,B.user_portrait from content_remark A ,t_user B where A.user_id=B.user_id
+		and A.common_id=#common_id#
+		<isEqual property="flag" compareValue="1">
+		  and A.is_recommend=1
+		</isEqual>
+	     ORDER BY A.create_date desc limit  #pageIndex# , #pageCount#
+	</select>
+	
+	<!--根据common_id查询 演出或者电影或者团购的影评数量-->
+	<select id="selectContentRemarkByCommonIdCount" parameterClass="java.util.Map" resultClass="int">
+		select count(*) from content_remark A 
+		where A.common_id=#common_id#
+		<isEqual property="flag" compareValue="1"  >
+		  and A.is_recommend=1
+		</isEqual>
+	</select>
+	
+	<!-- 添加影评回复 -->
+	<insert id="insert_remarkreply" parameterClass="remarkreply">
+		insert into remak_reply(remark_id,content,user_id,create_date)
+		values(#remark_id#,#content#,#user_id#,now())
+		<selectKey resultClass="int" keyProperty="id" >
+   			SELECT @@IDENTITY AS id
+   		</selectKey>
+	</insert>
+	
+	<!-- 删除影评回复 -->
+	<delete id="delete_remarkreply">
+		delete from remak_reply where id=#value#
+	</delete>
+	
+	 
+	<!-- 查看影评评论的评论 -->
+	<select id="selectRemarkReplyByRemarkId" parameterClass="java.util.Map" resultClass="remarkreply">
+		select A.* ,B.user_nick as user_name,B.user_portrait from remak_reply A ,t_user B where A.user_id=B.user_id
+		and  A.remark_id=#remark_id#
+	    ORDER BY A.create_date desc limit #pageIndex# , #pageCount#
+	</select>
+	<!-- 查看影评评论的评论数 -->
+	<select id="selectRemarkReplyByRemarkIdCount" parameterClass="java.util.Map" resultClass="int">
+		select count(*) from remak_reply A 
+		where A.remark_id=#remark_id#
+	</select>
+	
+	<!-- 都在说 -->
+	<select id="getDouzaishuo" parameterClass="java.util.Map" resultClass="contentremark">
+	select a.id,a.title,a.content,a.create_date,a.is_recommend,a.b_num,b.user_id,b.user_gender,b.user_portrait,b.user_nick,c.id show_id,c.name,c.img_url,(select count(*) from remak_reply where remark_id=a.id) replyCount
+			from content_remark a 
+			join 
+			t_user b 
+			on 
+			a.user_id=b.user_id 
+			join 
+			common_info c 
+			on a.common_id=c.id 
+			where a.is_recommend=1
+			order by
+			a.create_date 
+			desc 
+			limit #pageIndex#,#pageCount#
+	</select>
+	
+		<select id="getDouzaishuoCount" parameterClass="java.util.Map" resultClass="String">
+	select count(*) from (select a.id,a.title,a.content,a.create_date,a.is_recommend,a.b_num,b.user_nick,c.name,c.img_url,(select count(*) from remak_reply where remark_id=a.id) replyCount
+			from content_remark a 
+			join 
+			t_user b 
+			on 
+			a.user_id=b.user_id 
+			join 
+			common_info c 
+			on a.common_id=c.id 
+			where a.is_recommend=1) tmp
+	</select>
+	
+		<select id="getDouzaishuoDetail" parameterClass="java.util.Map" resultClass="contentremark">
+	select a.id,a.title,a.content,a.create_date,a.is_recommend,a.b_num,b.user_id,b.user_gender,b.user_portrait,b.user_nick,c.id show_id,c.name,c.img_url,(select count(*) from remak_reply where remark_id=a.id) replyCount
+			from content_remark a 
+			join 
+			t_user b 
+			on 
+			a.user_id=b.user_id 
+			join 
+			common_info c 
+			on a.common_id=c.id 
+			where 
+			a.id=#id#
+	</select>
+	
+	<select id="getOtherRecommond" parameterClass="map" resultClass="contentremark">
+	select * from content_remark where user_id=#user_id# limit 0,2
+	</select>
+	 
+	 <!-- 添加影评评论 -->
+	<insert id="insertRemarkComment" parameterClass="remarkreply">
+	insert into remak_reply (remark_id,content,user_id,create_date,reply_user_id,reply_count) values (#remark_id#,#content#,#user_id#,now(),#reply_user_id#,#reply_count#)
+	<selectKey resultClass="int" keyProperty="id" >
+   			SELECT @@IDENTITY AS id
+   		</selectKey>
+	</insert>
+	<update id="updateCount" parameterClass="remarkreply">
+	update remak_reply set reply_count=reply_count+1 where id=#id#
+	</update>
+	<select id="getRemarkComments" parameterClass="map" resultClass="remarkreply">
+	select A.*,B.user_portrait,B.user_nick from remak_reply A join t_user B on A.user_id=B.user_id where A.remark_id=#remark_id# order by A.create_date desc limit #pageIndex#,#pageCount#
+	</select>
+	
+	<select id="getRemarkCommentsCount" parameterClass="map" resultClass="String">
+	select count(*) from (select A.*,B.user_portrait,B.user_nick from remak_reply A join t_user B on A.user_id=B.user_id where A.remark_id=#remark_id# ) tmp
+	</select>
+	
+</sqlMap>

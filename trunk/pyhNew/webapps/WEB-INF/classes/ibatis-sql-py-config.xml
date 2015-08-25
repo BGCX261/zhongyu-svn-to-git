@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"
+    "sql-map-config-2.dtd">
+<sqlMapConfig>
+	<settings maxRequests="256" maxSessions="64" maxTransactions="16"
+		enhancementEnabled="true" useStatementNamespaces="true" />
+	<sqlMap resource="com/piaoyou/domain/user.xml" />
+	<sqlMap resource="com/piaoyou/domain/commonInfo.xml" />
+	<sqlMap resource="com/piaoyou/domain/movie.xml" />
+	<sqlMap resource="com/piaoyou/domain/group.xml" />
+	<sqlMap resource="com/piaoyou/domain/taopiao.xml" />
+	<sqlMap resource="com/piaoyou/domain/category.xml" />
+	<sqlMap resource="com/piaoyou/domain/common.xml" />
+	<sqlMap resource="com/piaoyou/domain/remark.xml" />
+	<sqlMap resource="com/piaoyou/domain/focusPhoto.xml" />
+	<sqlMap resource="com/piaoyou/domain/news.xml" />
+	<sqlMap resource="com/piaoyou/domain/result.xml" />
+</sqlMapConfig>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="taopiao">
+	<typeAlias alias="commonInfo" type="com.piaoyou.domain.CommonInfo" />
+	<select id="getCommonList" parameterClass="map" resultClass="commonInfo">
+		select distinct ci.id ,ci.name,ci.sub_name,ci.status,ci.introduction,tsi.site_name,ci.address ,ci.img_url,ci.heng_image_path,ci.shu_image_path
+			from  common_info ci
+			  join category_common_item cci on cci.common_info_id = ci.id 
+			  left join t_site_info tsi on tsi.id = ci.site_id
+			  join category c on c.id = cci.category_id
+			  and c.parent_id = #category_id#
+			  and ci.status in (0,1,9)
+			  <isNotEmpty property="city_id" prepend="AND">
+			  	tsi.city_id = #city_id#
+			  </isNotEmpty>
+			  <isEqual property="order" compareValue="hot">
+			  	 order by  ci.id
+			  </isEqual>
+			   <isEqual property="order" compareValue="time">
+			  	 order by   ct.time 
+			  </isEqual>	
+			  <isEqual property="order" compareValue="weight">
+			  	order by   cci.weight
+			  </isEqual>
+			  <isEmpty property="order">
+			 	 order by   cci.weight
+			  </isEmpty>
+			  limit #pageIndex#,#pageCount#
+	</select>
+	
+	<select id="getCommonTotalCount" parameterClass="map" resultClass="string">
+			select count(distinct ci.id)
+			from  common_info ci
+			  join category_common_item cci on cci.common_info_id = ci.id 
+			  left join t_site_info tsi on tsi.id = ci.site_id
+			  join category c on c.id = cci.category_id
+			  and c.parent_id = #category_id#
+			  and ci.status in (0,1,9)
+			  <isNotEmpty property="city_id" prepend="AND">
+			  	tsi.city_id = #city_id#
+			  </isNotEmpty>
+	</select>
+	
+	
+	<select id="getGroupList" parameterClass="map" resultClass="commonInfo">
+		select distinct ci.id ,ci.name,ci.sub_name,ci.address ,ci.img_url
+			from  common_info ci
+			  join category_common_item cci on cci.common_info_id = ci.id 
+			  join t_city tc on tc.id = ci.city_id
+			 join category c on c.id = cci.category_id
+			  and c.parent_id = #category_id#
+			  and ci.status in (0,1,9)
+			  <isNotEmpty property="city_id" prepend="AND">
+			  	ci.city_id = #city_id#
+			  </isNotEmpty>
+			  <isEqual property="order" compareValue="hot">
+			  	 order by  ci.id
+			  </isEqual>
+			   <isEqual property="order" compareValue="time">
+			  	 order by   ct.time 
+			  </isEqual>	
+			   <isEqual property="order" compareValue="weight">
+			  	 order by   cci.weight desc
+			  </isEqual>	
+			  <isEmpty property="order">
+			  	order by   cci.weight desc
+			  </isEmpty>
+			  limit #pageIndex#,#pageCount#
+	</select>
+	
+	<select id="getGroupTotalCount" parameterClass="map" resultClass="string">
+			select count(1)
+			from  common_info ci
+			  join category_common_item cci on cci.common_info_id = ci.id 
+			  join t_city tc on tc.id = ci.city_id
+			 join category c on c.id = cci.category_id
+			  and c.parent_id = #category_id#
+			  and ci.status in (0,1,9)
+			  <isNotEmpty property="city_id" prepend="AND">
+			  	ci.city_id = #city_id#
+			  </isNotEmpty>
+	</select>
+	
+	
+	<select id="getCommonInfoCategoryMinPrice" parameterClass="map" resultClass="string">
+		select min(min_price)
+			from  common_info ci
+			  join category_common_item cci on cci.common_info_id = ci.id 
+			  join t_site_info tsi on tsi.id = ci.site_id
+			  join common_price cp on cp.common_id = ci.id
+			join category c on c.id = cci.category_id
+			  and c.parent_id = #category_id#
+			  and tsi.city_id =#city_id#
+	</select>
+		<select id="getGroupCategoryMinPrice" parameterClass="map" resultClass="string">
+		select min(min_price)
+			from  common_info ci
+			  join category_common_item cci on cci.common_info_id = ci.id 
+			  join common_price cp on cp.common_id = ci.id
+			  join category c on c.id = cci.category_id
+			  and c.parent_id = #category_id#
+			  and ci.city_id =#city_id#
+	</select>
+</sqlMap>

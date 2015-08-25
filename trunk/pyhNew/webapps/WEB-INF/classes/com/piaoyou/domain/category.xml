@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="category">
+	<typeAlias alias="category" type="com.piaoyou.domain.Category" />
+	<select id="getListByPid" parameterClass="map" resultClass="category">
+			select * from category where parent_id = #parent_id# order by id asc
+	</select>
+	
+	<select id="getListByCommonId" parameterClass="map" resultClass="category">
+			select
+				  distinct c.title ,c.id,c.url
+				from
+				    category c
+				  join
+				    category_common_item cci
+				  on cci.category_id = c.id and
+				     cci.common_info_id = #id# and
+				     (c.title not like '%区%' or
+				      c.title not like '%市%')
+				limit
+				  0, 5
+	</select>
+	
+	<select id="getById" parameterClass="map" resultClass="category">
+			select * from category where id = #id#
+	</select>
+	
+	
+	<select id ="getCategoryListByID" parameterClass="map" resultClass="category">
+		select * from category where parent_id in (select parent_id from category where id = #id#)
+	
+	
+	</select>
+	
+	<update id="update" parameterClass="category">
+	update category set title=#title#,parent_id=#parent_id# where id=#id#
+	</update>
+	<insert id="insert" parameterClass="category">
+	insert into category (parent_id,title) values (#parent_id#,#title#)
+	</insert>
+	<delete id="delete" parameterClass="int">
+		delete from category where id=$value$
+	</delete>
+</sqlMap>

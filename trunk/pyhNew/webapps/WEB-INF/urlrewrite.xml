@@ -1,0 +1,658 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 3.2//EN"
+        "http://tuckey.org/res/dtds/urlrewrite3.2.dtd">
+
+<!--
+
+    Configuration file for UrlRewriteFilter
+    http://tuckey.org/urlrewrite/
+
+-->
+<urlrewrite>
+
+<!-- 
+============
+ -->
+  	<rule>
+
+        <from>^/errenshijie-([0-9]*)$</from>
+        <to>/errenshijie/errenshijie.do?city_id=$1</to>
+    </rule>
+  	<rule>
+
+        <from>^/errenshijie-([0-9]*)/$</from>
+        <to>/errenshijie/errenshijie.do?city_id=$1</to>
+    </rule>
+  	<rule>
+
+        <from>^/errenshijie-([0-9]+)-([0-9]*)/$</from>
+        <to>/errenshijie/qinggansub.do?category_id=$1&amp;city_id=$2</to>
+    </rule>
+  	<rule>
+
+        <from>^/errenshijie-([0-9]+)-([0-9]*)$</from>
+        <to>/errenshijie/qinggansub.do?category_id=$1&amp;city_id=$2</to>
+    </rule>
+  	<rule>
+
+        <from>^/errenshijie-([0-9]+)-([0-9]*)-([0-9]+)$</from>
+        <to>/errenshijie/qinggansub.do?category_id=$1&amp;city_id=$2&amp;pageNum=$3</to>
+    </rule>
+  	<rule>
+
+        <from>^/errenshijie/([0-9]+)-([0-9]*)$</from>
+        <to>/errenshijie/commonInfoDetail.do?id=$1&amp;city_id=$2</to>
+    </rule>
+
+<!-- 
+==========
+ -->
+  	<rule>
+
+        <from>^/xunkaixin-([0-9]*)$</from>
+        <to>/xunkaixin/xunkaixin.do?city_id=$1</to>
+    </rule>
+  	<rule>
+
+        <from>^/xunkaixin-([0-9]*)/$</from>
+        <to>/xunkaixin/xunkaixin.do?city_id=$1</to>
+    </rule>
+  	<rule>
+
+        <from>^/xunkaixin-([0-9]+)-([0-9]*)/$</from>
+        <to>/xunkaixin/qinggansub.do?category_id=$1&amp;city_id=$2</to>
+    </rule>
+  	<rule>
+
+        <from>^/xunkaixin-([0-9]+)-([0-9]*)$</from>
+        <to>/xunkaixin/qinggansub.do?category_id=$1&amp;city_id=$2</to>
+    </rule>
+  	<rule>
+
+        <from>^/xunkaixin-([0-9]+)-([0-9]*)-([0-9]+)$</from>
+        <to>/xunkaixin/qinggansub.do?category_id=$1&amp;city_id=$2&amp;pageNum=$3</to>
+    </rule>
+
+  	<rule>
+
+        <from>^/xunkaixin/([0-9]+)-([0-9]*)$</from>
+        <to>/xunkaixin/commonInfoDetail.do?id=$1&amp;city_id=$2</to>
+    </rule>
+<!-- 
+=============
+ -->
+  	<rule>
+
+        <from>^/dafashiguang-([0-9]*)$</from>
+        <to>/dafashiguang/dafashiguang.do?city_id=$1</to>
+    </rule>
+  	<rule>
+
+        <from>^/dafashiguang-([0-9]*)$</from>
+        <to>/dafashiguang/dafashiguang.do?city_id=$1</to>
+    </rule>
+  	<rule>
+
+        <from>^/dafashiguang-([0-9]+)-([0-9]*)$</from>
+        <to>/dafashiguang/qinggansub.do?category_id=$1&amp;city_id=$2</to>
+    </rule>
+  	<rule>
+
+        <from>^/dafashiguang-([0-9]+)-([0-9]*)$</from>
+        <to>/dafashiguang/qinggansub.do?category_id=$1&amp;city_id=$2</to>
+    </rule>
+  	<rule>
+
+        <from>^/dafashiguang-([0-9]+)-([0-9]*)-([0-9]+)$</from>
+        <to>/dafashiguang/qinggansub.do?category_id=$1&amp;city_id=$2&amp;pageNum=$3</to>
+    </rule>
+  	<rule>
+
+        <from>^/dafashiguang/([0-9]+)-([0-9]*)$</from>
+        <to>/dafashiguang/commonInfoDetail.do?id=$1&amp;city_id=$2</to>
+    </rule>
+<!-- 
+==============
+ -->
+  	<rule>
+
+        <from>^/shifang-([0-9]*)$</from>
+        <to>/shifang/shifang.do?city_id=$1</to>
+    </rule>
+  	<rule>
+
+        <from>^/shifang-([0-9]*)/$</from>
+        <to>/shifang/shifang.do?city_id=$1</to>
+    </rule>
+  	<rule>
+
+        <from>^/shifang-([0-9]+)-([0-9]*)/$</from>
+        <to>/shifang/qinggansub.do?category_id=$1&amp;city_id=$2</to>
+    </rule>
+  	<rule>
+
+        <from>^/shifang-([0-9]+)-([0-9]*)$</from>
+        <to>/shifang/qinggansub.do?category_id=$1&amp;city_id=$2</to>
+    </rule>
+  	<rule>
+
+        <from>^/shifang-([0-9]+)-([0-9]*)-([0-9]+)$</from>
+        <to>/shifang/qinggansub.do?category_id=$1&amp;city_id=$2&amp;pageNum=$3</to>
+    </rule>
+  	<rule>
+
+        <from>^/shifang/([0-9]+)-([0-9]*)$</from>
+        <to>/shifang/commonInfoDetail.do?id=$1&amp;city_id=$2</to>
+    </rule>
+<!-- 
+================
+ -->
+  	<rule>
+
+        <from>^/jinyeyouxi-([0-9]*)$</from>
+        <to>/jinyeyouxi/jinyeyouxi.do?city_id=$1</to>
+    </rule>
+  	<rule>
+
+        <from>^/jinyeyouxi-([0-9]*)$</from>
+        <to>/jinyeyouxi/jinyeyouxi.do?city_id=$1</to>
+    </rule>
+  	<rule>
+
+        <from>^/jinyeyouxi-([0-9]+)-([0-9]*)$</from>
+        <to>/jinyeyouxi/qinggansub.do?category_id=$1&amp;city_id=$2</to>
+    </rule>
+  	<rule>
+
+        <from>^/jinyeyouxi-([0-9]+)-([0-9]*)$</from>
+        <to>/jinyeyouxi/qinggansub.do?category_id=$1&amp;city_id=$2</to>
+    </rule>
+  	<rule>
+
+        <from>^/jinyeyouxi-([0-9]+)-([0-9]*)-([0-9]+)$</from>
+        <to>/jinyeyouxi/qinggansub.do?category_id=$1&amp;city_id=$2&amp;pageNum=$3</to>
+    </rule>
+  	<rule>
+
+        <from>^/jinyeyouxi/([0-9]+)-([0-9]*)$</from>
+        <to>/jinyeyouxi/commonInfoDetail.do?id=$1&amp;city_id=$2</to>
+    </rule>
+<!-- 
+=================
+ -->
+  	<rule>
+
+        <from>^/benzhoujingpin-([0-9]*)$</from>
+        <to>/benzhoujingpin/benzhoujingpin.do?city_id=$1</to>
+    </rule>
+  	<rule>
+
+        <from>^/benzhoujingpin-([0-9]+)-([0-9]*)$</from>
+        <to>/benzhoujingpin/benzhoujingpinsub.do?category_id=$1&amp;city_id=$2</to>
+    </rule>
+  	<rule>
+
+        <from>^/benzhoujingpin-([0-9]+)-([0-9]*)-([0-9]+)$</from>
+        <to>/benzhoujingpin/benzhoujingpinsub.do?category_id=$1&amp;city_id=$2&amp;pageNum=$3</to>
+    </rule>
+  	<rule>
+        <from>^/benzhoujingpin/([0-9]+)-([0-9]*)$</from>
+        <to>/benzhoujingpin/commonInfoDetail.do?id=$1&amp;city_id=$2</to>
+    </rule>
+
+<!-- 
+=================
+ -->
+  	<rule>
+
+        <from>^/huaju-([0-9]*)$</from>
+        <to>/huaju/huaju.do?city_id=$1</to>
+    </rule>
+  	<rule>
+
+        <from>^/huaju-([0-9]+)-([0-9]*)$</from>
+        <to>/huaju/huajuCategory.do?category_id=$1&amp;city_id=$2</to>
+    </rule>
+  	<rule>
+
+        <from>^/huaju-([0-9]+)-([0-9]*)-([0-9]+)$</from>
+        <to>/huaju/huajuCategory.do?category_id=$1&amp;city_id=$2&amp;pageNum=$3</to>
+    </rule>
+  	<rule>
+
+        <from>^/huaju/([0-9]+)-([0-9]*)$</from>
+        <to>/huaju/commonInfoDetail.do?id=$1&amp;city_id=$2</to>
+    </rule>
+
+<!-- 
+=================
+ -->
+  	<rule>
+
+        <from>^/yanchanghui-([0-9]*)$</from>
+        <to>/yanchanghui/yanchanghui.do?city_id=$1</to>
+    </rule>
+  	<rule>
+
+        <from>^/yanchanghui-([0-9]+)-([0-9]*)$</from>
+        <to>/yanchanghui/yanchanghuiCategory.do?category_id=$1&amp;city_id=$2</to>
+    </rule>
+  	<rule>
+
+        <from>^/yanchanghui-([0-9]+)-([0-9]*)-([0-9]+)$</from>
+        <to>/yanchanghui/yanchanghuiCategory.do?category_id=$1&amp;city_id=$2&amp;pageNum=$3</to>
+    </rule>
+  	<rule>
+
+        <from>^/yanchanghui/([0-9]+)-([0-9]*)$</from>
+        <to>/yanchanghui/commonInfoDetail.do?id=$1&amp;city_id=$2</to>
+    </rule>
+
+<!-- 
+=================
+ -->
+  	<rule>
+
+        <from>^/xijuquyi-([0-9]*)$</from>
+        <to>/xijuquyi/xijuquyi.do?city_id=$1</to>
+    </rule>
+  	<rule>
+
+        <from>^/xijuquyi-([0-9]+)-([0-9]*)$</from>
+        <to>/xijuquyi/xijuquyiCategory.do?category_id=$1&amp;city_id=$2</to>
+    </rule>
+  	<rule>
+
+        <from>^/xijuquyi-([0-9]+)-([0-9]*)-([0-9]+)$</from>
+        <to>/xijuquyi/xijuquyiCategory.do?category_id=$1&amp;city_id=$2&amp;pageNum=$3</to>
+    </rule>
+  	<rule>
+
+        <from>^/xijuquyi/([0-9]+)-([0-9]*)$</from>
+        <to>/xijuquyi/commonInfoDetail.do?id=$1&amp;city_id=$2</to>
+    </rule>
+<!-- 
+=================
+ -->
+  	<rule>
+
+        <from>^/gudian-([0-9]*)$</from>
+        <to>/gudian/gudian.do?city_id=$1</to>
+    </rule>
+  	<rule>
+
+        <from>^/gudian-([0-9]+)-([0-9]*)$</from>
+        <to>/gudian/gudianCategory.do?category_id=$1&amp;city_id=$2</to>
+    </rule>
+  	<rule>
+
+        <from>^/gudian-([0-9]+)-([0-9]*)-([0-9]+)$</from>
+        <to>/gudian/gudianCategory.do?category_id=$1&amp;city_id=$2&amp;pageNum=$3</to>
+    </rule>
+  	<rule>
+
+        <from>^/gudian/([0-9]+)-([0-9]*)$</from>
+        <to>/gudian/commonInfoDetail.do?id=$1&amp;city_id=$2</to>
+    </rule>
+<!-- 
+=================
+ -->
+  	<rule>
+
+        <from>^/yaogunyue-([0-9]*)$</from>
+        <to>/yaogunyue/yaogunyue.do?city_id=$1</to>
+    </rule>
+  	<rule>
+
+        <from>^/yaogunyue-([0-9]+)-([0-9]*)$</from>
+        <to>/yaogunyue/yaogunyueCategory.do?category_id=$1&amp;city_id=$2</to>
+    </rule>
+  	<rule>
+
+        <from>^/yaogunyue-([0-9]+)-([0-9]*)-([0-9]+)$</from>
+        <to>/yaogunyue/yaogunyueCategory.do?category_id=$1&amp;city_id=$2&amp;pageNum=$3</to>
+    </rule>
+  	<rule>
+
+        <from>^/yaogunyue/([0-9]+)-([0-9]*)$</from>
+        <to>/yaogunyue/commonInfoDetail.do?id=$1&amp;city_id=$2</to>
+    </rule>
+<!-- 
+=================
+ -->
+  	<rule>
+
+        <from>^/ertongqinzi-([0-9]*)$</from>
+        <to>/ertongqinzi/ertongqinzi.do?city_id=$1</to>
+    </rule>
+  	<rule>
+
+        <from>^/ertongqinzi-([0-9]+)-([0-9]*)$</from>
+        <to>/ertongqinzi/ertongqinziCategory.do?category_id=$1&amp;city_id=$2</to>
+    </rule>
+  	<rule>
+
+        <from>^/ertongqinzi-([0-9]+)-([0-9]*)-([0-9]+)$</from>
+        <to>/ertongqinzi/ertongqinziCategory.do?category_id=$1&amp;city_id=$2&amp;pageNum=$3</to>
+    </rule>
+  	<rule>
+
+        <from>^/ertongqinzi/([0-9]+)-([0-9]*)$</from>
+        <to>/ertongqinzi/commonInfoDetail.do?id=$1&amp;city_id=$2</to>
+    </rule>
+
+<!-- 
+=================
+ -->
+  	<rule>
+
+        <from>^/saishi-([0-9]*)$</from>
+        <to>/saishi/saishi.do?city_id=$1</to>
+    </rule>
+  	<rule>
+
+        <from>^/saishi-([0-9]+)-([0-9]*)$</from>
+        <to>/saishi/saishiCategory.do?category_id=$1&amp;city_id=$2</to>
+    </rule>
+  	<rule>
+
+        <from>^/saishi-([0-9]+)-([0-9]*)-([0-9]+)$</from>
+        <to>/saishi/saishiCategory.do?category_id=$1&amp;city_id=$2&amp;pageNum=$3</to>
+    </rule>
+  	<rule>
+
+        <from>^/saishi/([0-9]+)-([0-9]*)$</from>
+        <to>/saishi/commonInfoDetail.do?id=$1&amp;city_id=$2</to>
+    </rule>
+
+<!-- 
+=================
+ -->
+  	<rule>
+
+        <from>^/movie-([0-9]*)$</from>
+        <to>/movie/movie.do?city_id=$1</to>
+    </rule>
+  	<rule>
+
+        <from>^/movie-([0-9]+)-([0-9]*)$</from>
+        <to>/movie/movieCategory.do?category_id=$1&amp;city_id=$2</to>
+    </rule>
+  	<rule>
+
+        <from>^/movie-([0-9]+)-([0-9]*)-([0-9]+)$</from>
+        <to>/movie/movieCategory.do?category_id=$1&amp;city_id=$2&amp;pageNum=$3</to>
+    </rule>
+  	<rule>
+
+        <from>^/movie/([0-9]+)-([0-9]*)$</from>
+        <to>/movie/commonInfoDetail.do?id=$1&amp;city_id=$2</to>
+    </rule>
+
+<!-- 
+=================
+ -->
+  	<rule>
+
+        <from>^/taopiao-([0-9]*)$</from>
+        <to>/taopiao/main.do?city_id=$1</to>
+    </rule>
+  	<rule>
+
+        <from>^/taopiao-([0-9]+)-([0-9]*)$</from>
+        <to>/taopiao/taopiaosub.do?category_id=$1&amp;city_id=$2</to>
+    </rule>
+  	<rule>
+
+        <from>^/taopiao-([0-9]+)-([0-9]*)-([0-9]+)$</from>
+        <to>/taopiao/taopiaosub.do?category_id=$1&amp;city_id=$2&amp;pageNum=$3</to>
+    </rule>
+  	<rule>
+
+        <from>^/taopiao-c-([0-9]+)-([0-9]*)$</from>
+        <to>/taopiao/taopiaoChannel.do?category_id=$1&amp;city_id=$2</to>
+    </rule>
+  	<rule>
+
+        <from>^/taopiao-c-([0-9]+)-([0-9]*)-([0-9]+)$</from>
+        <to>/taopiao/taopiaoChannel.do?category_id=$1&amp;city_id=$2&amp;pageNum=$3</to>
+    </rule>
+  	<rule>
+        <from>^/taopiao/([0-9]+)-([0-9]*)$</from>
+        <to>/taopiao/taopiaoDetail.do?id=$1&amp;city_id=$2</to>
+    </rule>
+    <rule>
+        <from>^/taopiao-g-([0-9]+)-([0-9]*)$</from>
+        <to>taopiao/taopiaoGroupsub.do?category_id=$1&amp;city_id=$2</to>
+    </rule>
+     <rule>
+        <from>^/taopiao-l-([0-9]+)-([0-9]*)$</from>
+        <to>/taopiao/taopiaoList.do?category_id=$1&amp;city_id=$2</to>
+    </rule>
+     <rule>
+        <from>^/taopiao-l-([0-9]+)-([0-9]*)-([0-9]+)$</from>
+        <to>/taopiao/taopiaoList.do?category_id=$1&amp;city_id=$2&amp;pageNum=$3</to>
+    </rule>
+
+<!-- 
+=================
+ -->
+  	<rule>
+
+        <from>^/group-([0-9]*)$</from>
+        <to>/group/main.do?city_id=$1</to>
+    </rule>
+  	<rule>
+
+        <from>^/group/([0-9]+)-([0-9]*)$</from>
+        <to>/group/groupdetail.do?id=$1&amp;city_id=$2</to>
+    </rule>
+
+<!--
+=======
+-->
+	<rule>
+        <from>^/result-([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-([0-9]*)$</from>
+        <to>/result/main.do?show_name=$1&amp;city_id_result=$2&amp;week=$3&amp;timeType=$4&amp;priceType=$5&amp;show_type=$6&amp;city_id=$7</to>
+    </rule>
+    <rule>
+        <from>^/result-([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-([0-9]+)-([0-9]*)-([0-9]+)$</from>
+        <to>/result/main.do?show_name=$1&amp;city_id_result=$2&amp;week=$3&amp;timeType=$4&amp;priceType=$5&amp;show_type=$6&amp;city_id=$7&amp;pageNum=$8</to>
+    </rule>
+
+
+  	<rule>
+        <from>^/result/([0-9]+)-([0-9]*)$</from>
+        <to>/result/resultDetail.do?id=$1&amp;city_id=$2</to>
+    </rule>
+<!--
+=======
+-->
+  	<rule>
+     	<from>^/douzaikan-([0-9]*)$</from>
+        <to>/douzaikan/douzaikan.do?city_id=$1</to>
+    </rule>
+    
+	<rule>
+        <from>^/douzaikan-([0-9]+)-([0-9]*)$</from>
+        <to>/douzaikan/douzaikan.do?category_id=$1&amp;city_id=$2</to>
+    </rule>
+
+  	<rule>
+        <from>^/douzaishuo-([0-9]*)$</from>
+        <to>/douzaishuo/douzaishuo.do?city_id=$1</to>
+    </rule>
+  	<rule>
+        <from>^/piaoyoutuijian-([0-9]*)$</from>
+        <to>/piaoyoutuijian/piaoyoutuijian.do?city_id=$1</to>
+    </rule>
+    
+    
+    
+    <rule>
+        <from>^/sbyx-([0-9]*)$</from>
+        <to>/sbyx/main.do?city_id=$1</to>
+    </rule>
+    
+    <rule>
+        <from>^/sbyx-([0-9]+)-([0-9]*)$</from>
+        <to>/sbyx/sbyxlist.do?category_id=$1&amp;city_id=$2</to>
+    </rule>
+    
+      <rule>
+        <from>^/sbyx/([0-9]+)-([0-9]*)$</from>
+        <to>/sbyx/sbyxdetail.do?id=$1&amp;city_id=$2</to>
+    </rule>
+
+
+<!--
+
+二手票
+	<rule>
+        <note>
+            二手票频道依据演出城市显示列表页面重写
+        </note>
+        <from>^/ershoupiao-([a-z0-9]+)/$</from>
+        <to>/ershoupiao/usedTicket.do?show_type_enname=&amp;city_enname=$1</to>
+    </rule>
+
+	<rule>
+        <note>
+            二手票频道依据演出城市显示列表页面重写
+        </note>
+        <from>^/ershoupiao-([a-z0-9]+)$</from>
+        <to>/ershoupiao/usedTicket.do?show_type_enname=&amp;city_enname=$1</to>
+    </rule>
+
+    <rule>
+        <note>
+            二手票频道依据演出类型和城市显示列表页面重写
+        </note>
+        <from>^/ershoupiao-([a-z0-9]+)/([a-z0-9]+)/$</from>
+        <to>/ershoupiao/usedTicket.do?show_type_enname=$2&amp;city_enname=$1</to>
+    </rule>
+
+	<rule>
+        <note>
+            二手票频道依据演出类型和城市显示列表页面重写
+        </note>
+        <from>^/ershoupiao-([a-z0-9]+)/([a-z0-9]+)$</from>
+        <to>/ershoupiao/usedTicket.do?show_type_enname=$2&amp;city_enname=$1</to>
+    </rule>
+
+
+    <rule>
+        <note>
+            二手票频道页面重写
+        </note>
+        <from>^/ershoupiao/$</from>
+        <to>/ershoupiao/usedTicket.do?show_type_enname=&amp;city_enname=</to>
+    </rule>
+
+	<rule>
+        <note>
+            二手票频道页面重写
+        </note>
+        <from>^/ershoupiao$</from>
+        <to type="redirect">%{context-path}/ershoupiao/</to>
+    </rule>
+
+    <rule>
+        <note>
+            二手票详细信息页面重写
+        </note>
+        <from>^/ershoupiao-([a-z0-9]+)/([a-z0-9]+)-([0-9]+)$</from>
+        <to>/ershoupiao/show.do?id=$3&amp;show_type=$2&amp;city=$1</to>
+    </rule>
+
+	<rule>
+        <note>
+            二手票详细信息页面重写
+        </note>
+        <from>^/ershoupiao-([a-z0-9]+)/([a-z0-9]+)-([0-9]+)/$</from>
+        <to>/ershoupiao/show.do?id=$3&amp;show_type=$2&amp;city=$1</to>
+    </rule>
+
+-->
+
+  
+
+<!-- 
+    <outbound-rule>
+        <note>
+            The outbound-rule specifies that when response.encodeURL is called (if you are using JSTL c:url)
+            the url /rewrite-status will be rewritten to /test/status/.
+
+            The above rule and this outbound-rule means that end users should never see the
+            url /rewrite-status only /test/status/ both in thier location bar and in hyperlinks
+            in your pages.
+        </note>
+        <from>^/usedTicket/([a-z0-9]+)/([a-z0-9]+)/([0-9]+)$</from>
+        <to>%{context-path}/usedTicket/show.do?id=$3&amp;show_type=$1&amp;city=$2</to>
+    </outbound-rule>
+ -->
+
+
+
+
+    <!--
+
+    INSTALLATION
+
+        in your web.xml add...
+
+        <filter>
+            <filter-name>UrlRewriteFilter</filter-name>
+            <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+            <init-param>
+                <param-name>logLevel</param-name>
+                <param-value>WARN</param-value>
+            </init-param>
+        </filter>
+        <filter-mapping>
+            <filter-name>UrlRewriteFilter</filter-name>
+            <url-pattern>/*</url-pattern>
+        </filter-mapping>
+
+     EXAMPLES
+
+     Redirect one url
+        <rule>
+            <from>/some/old/page.html</from>
+            <to type="redirect">/very/new/page.html</to>
+        </rule>
+
+    Redirect a directory
+        <rule>
+            <from>/some/olddir/(.*)</from>
+            <to type="redirect">/very/newdir/$1</to>
+        </rule>
+
+    Clean a url
+        <rule>
+            <from>/products/([0-9]+)</from>
+            <to>/products/index.jsp?product_id=$1</to>
+        </rule>
+    eg, /products/1234 will be passed on to /products/index.jsp?product_id=1234 without the user noticing.
+
+    Browser detection
+        <rule>
+            <condition name="user-agent">Mozilla/[1-4]</condition>
+            <from>/some/page.html</from>
+            <to>/some/page-for-old-browsers.html</to>
+        </rule>
+    eg, will pass the request for /some/page.html on to /some/page-for-old-browsers.html only for older
+    browsers whose user agent srtings match Mozilla/1, Mozilla/2, Mozilla/3 or Mozilla/4.
+
+    Centralised browser detection
+        <rule>
+            <condition name="user-agent">Mozilla/[1-4]</condition>
+            <set type="request" name="browser">moz</set>
+        </rule>
+    eg, all requests will be checked against the condition and if matched
+    request.setAttribute("browser", "moz") will be called.
+
+    -->
+
+</urlrewrite>
+

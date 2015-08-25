@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="movie">
+	<typeAlias alias="commonInfo" type="com.piaoyou.domain.CommonInfo" />
+	<select id="getMovieList" parameterClass="map" resultClass="commonInfo">
+		select distinct ci.id ,ci.name,ci.sub_name,ci.status,ci.introduction,ci.address ,ci.time,ci.img_url,ci.heng_image_path,ci.shu_image_path,ci.movie_type
+			from  common_info ci
+			  join category_common_item cci on cci.common_info_id = ci.id 
+			  join common_time ct on ct.common_id = ci.id
+			  and  cci.category_id = #category_id#
+			  and ci.status in (0,1,9)
+			  <isEqual property="order" compareValue="hot">
+			  	 order by  ci.id
+			  </isEqual>
+			   <isEqual property="order" compareValue="time">
+			  	 order by   ct.time 
+			  </isEqual>
+			  <isEqual property="order" compareValue="weight">
+			  	 order by   cci.weight 
+			  </isEqual>
+			  <isEmpty property="order">
+			  	 order by   cci.weight 
+			  </isEmpty>		
+			  limit #pageIndex#,#pageCount#
+	</select>
+	
+	<select id="getMovieTotalCount" parameterClass="map" resultClass="string">
+			select count(1)
+			from  common_info ci
+			  join category_common_item cci on cci.common_info_id = ci.id 
+			  and  cci.category_id = #category_id#
+			  and ci.status in (0,1,9)
+	</select>
+</sqlMap>

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="commonInfo">
+	<typeAlias alias="commonInfo" type="com.piaoyou.domain.CommonInfo" />
+	<select id="getCommonList" parameterClass="map" resultClass="commonInfo">
+		select distinct ci.id ,ci.name,ci.sub_name,ci.show_type,ci.status,ci.introduction,tsi.site_name,ci.address ,ci.img_url,ci.heng_image_path,ci.shu_image_path,tsi.city_id
+			from  common_info ci
+			  join category_common_item cci on cci.common_info_id = ci.id 
+			  join t_site_info tsi on tsi.id = ci.site_id
+			  join common_time ct on ct.common_id = ci.id
+			  join t_city tc on tc.id = tsi.city_id 
+			  and ct.common_time>now()
+			  and  cci.category_id = #category_id#
+			  and ci.status in (0,1,9)
+			  <isNotEmpty property="city_id" prepend="AND">
+			  	tsi.city_id = #city_id#
+			  </isNotEmpty>
+			  <isEqual property="order" compareValue="id">
+			  	 order by  ci.id desc
+			  </isEqual>
+			   <isEqual property="order" compareValue="time">
+			  	 order by   ct.common_time 
+			  </isEqual>
+			  <isEqual property="order" compareValue="recommend_count">
+			  	 order by   ci.recommend_count desc
+			  </isEqual>
+			   <isEqual property="order" compareValue="weight">
+			  	 order by   cci.weight desc
+			  </isEqual>	
+			  <isEmpty property="order">
+			  	 order by cci.weight desc
+			  </isEmpty>
+			  limit #pageIndex#,#pageCount#
+	</select>
+	
+	<select id="getCommonTotalCount" parameterClass="map" resultClass="string">
+			select count(distinct ci.id)
+			from  common_info ci
+			  join category_common_item cci on cci.common_info_id = ci.id 
+			  join t_site_info tsi on tsi.id = ci.site_id
+			  join common_time ct on ct.common_id = ci.id
+			  join t_city tc on tc.id = tsi.city_id 
+			  and ct.common_time>now()
+			  and  cci.category_id = #category_id#
+			  and ci.status in (0,1,9)
+			  <isNotEmpty property="city_id" prepend="AND">
+			  	tsi.city_id = #city_id#
+			  </isNotEmpty>
+	</select>
+	
+	
+	<select id="getCommonInfoCategoryMinPrice" parameterClass="map" resultClass="string">
+		select min(min_price)
+			from  common_info ci
+			  join category_common_item cci on cci.common_info_id = ci.id 
+			  join t_site_info tsi on tsi.id = ci.site_id
+			  join t_city tc on tc.id = tsi.city_id 
+			  join common_price cp on cp.common_id = ci.id
+			  and  cci.category_id = #category_id#
+			  <isNotEmpty property="city_id" prepend="and">
+			  	tsi.city_id =#city_id#
+			  </isNotEmpty>
+	</select>
+	
+	<select id="getCommonTimeList" resultClass="commonInfo">
+		 select distinct common_id id ,min(common_time) show_time ,limit_time from common_time
+			where common_time > now() or common_time = '全年' or limit_time > now()
+			group by
+ 		 common_id
+	</select>
+	
+	<select id="getCommonPriceList" resultClass="commonInfo">
+		select cp.common_id id,min(cp.min_price) min_price ,cp.price,discount,cp.url mainURL ,ai.agency_name from common_price cp join agency_info ai on ai.id= cp.agency_id group by cp.common_id
+	</select>
+	
+	<!-- 演出末级页 -->
+	<select id="getCommonInfoDetail" parameterClass="map" resultClass="commonInfo">
+		select ci.id,ci.name,ci.sub_name,ci.introduction,ci.show_type,ci.img_url,ci.heng_image_path,ci.shu_image_path,ci.piaoshang_tel,tsi.site_name,tc.city_name,tsi.site_map_coord,tc.id city_id
+		from common_info ci
+ 		 join t_site_info tsi
+    		on tsi.id = ci.site_id
+  		join t_city tc
+    		on tc.id = tsi.city_id
+    		and ci.id=#id#
+	</select>
+	
+	
+	<!-- 获取演出时间 -->
+	<select id="getCommonTime" parameterClass="map" resultClass="commonInfo">
+		select distinct common_time show_time,limit_time from common_time where common_id = #id# order by common_time asc
+	</select>
+	<select id="getCommonPrice" parameterClass="map" resultClass="commonInfo">
+		select price,discount,min_price,url mainURL from common_price where common_id = #id#
+	</select>
+	
+	<!-- 都在看 -->
+	<select id="getDouzaikan" parameterClass="map" resultClass="commonInfo">
+	select A.*,B.name,B.id,B.img_url,B.recommend_count,C.city_id ,C.site_name
+	from  category_common_item A  
+	join 
+	common_info B 
+	on A.common_info_id=B.id 
+	join t_site_info C 
+	on C.id=B.site_id 
+	join t_city tc on tc.id = C.city_id 
+	where B.type=0 and B.status in (0,1,9)  
+	<isNotEmpty property="city_id" prepend="AND">
+			  	C.city_id = #city_id#
+	</isNotEmpty> 
+	<isNotEmpty property="category_id" prepend="AND">
+			  	A.category_id = #category_id#
+	</isNotEmpty> 
+	group by A.common_info_id  
+	order by B.recommend_count desc
+	limit #pageIndex#,#pageCount#
+	</select>
+	
+	<select id="getDouzaikanCount" parameterClass="map" resultClass="String">
+	select count(*) from (select A.*,B.name,B.id,B.img_url,B.recommend_count,C.city_id 
+	from  category_common_item A  
+	join 
+	common_info B 
+	on A.common_info_id=B.id 
+	join t_site_info C 
+	on C.id=B.site_id 
+	where B.type=0 and B.status in (0,1,9)  
+	<isNotEmpty property="city_id" prepend="AND">
+			  	C.city_id = #city_id#
+	</isNotEmpty> 
+	<isNotEmpty property="category_id" prepend="AND">
+			  	A.category_id = #category_id#
+	</isNotEmpty> 
+	group by A.common_info_id  
+	) tmp
+	</select>
+	
+		<!-- 票友中心或许你喜欢 -->
+	<select id="getHuoxu" parameterClass="map" resultClass="commonInfo">
+	select A.*,B.name,B.sub_name,B.id,B.img_url,B.recommend_count,C.city_id ,C.site_name
+	from  category_common_item A  
+	join 
+	common_info B 
+	on A.common_info_id=B.id 
+	join t_site_info C 
+	on C.id=B.site_id 
+	where B.type=0 and B.status in (0,1,9) and B.show_type in (#coll_ids#) 
+	<isNotEmpty property="city_id" prepend="AND">
+			  	C.city_id = #city_id#
+	</isNotEmpty> 
+	<isNotEmpty property="category_id" prepend="AND">
+			  	A.category_id = #category_id#
+	</isNotEmpty> 
+	group by A.common_info_id  
+	limit #pageIndex#,#pageCount#
+	</select>
+	
+	<select id="getHuoxuCount" parameterClass="map" resultClass="String">
+	select count(*) from (select A.*,B.name,B.id,B.img_url,B.recommend_count,C.city_id 
+	from  category_common_item A  
+	join 
+	common_info B 
+	on A.common_info_id=B.id 
+	join t_site_info C 
+	on C.id=B.site_id 
+	join t_city tc on tc.id = C.city_id
+	where B.type=0 and B.status in (0,1,9)  and B.show_type in (#coll_ids#) 
+	<isNotEmpty property="city_id" prepend="AND">
+			  	C.city_id = #city_id#
+	</isNotEmpty> 
+	<isNotEmpty property="category_id" prepend="AND">
+			  	A.category_id = #category_id#
+	</isNotEmpty> 
+	group by A.common_info_id  
+	) tmp
+	</select>
+	
+	<select id="getTimeList" parameterClass="map" resultClass="commonInfo">
+		select distinct common_id id,common_time show_time ,limit_time from common_time where common_time > now() and common_id = #id# order by common_time
+	</select>
+	
+	
+	<select id="getShowTotalCount" parameterClass="int" resultClass="string">
+		 select count(distinct ci.id) from common_info ci join t_site_info tsi on tsi.id = ci.site_id and ci.status in (0,1,9)
+			join (select common_id ,min(common_time) time from common_time group by common_id having time>now()) tmp on tmp.common_id = ci.id
+		join common_price cp on cp.common_id = ci.id 
+			and tsi.city_id = #value#
+	</select>
+</sqlMap>

@@ -1,0 +1,66 @@
+http://wenku.baidu.com/view/9c44f8748e9951e79b89273f.html
+
+1.获取新版本
+软件现在放在  /home/software/
+[root@localhost root]# wget http://124.47.56.203:82/down/mysql-5.1.55.tar.gz
+2用户赋权
+[root@localhost root]# groupadd mysql
+[root@localhost root]# useradd mysql -g mysql -p mysql  //g为用户 p为密码
+3建立解压目录软连接
+[root@localhost root]# tar -zxvf mysql-5.1.55.tar.gz
+[root@localhost root]# ln -s mysql-5.1.55 mysql
+4配置mysql
+[root@localhost root]#  mkdir -p /usr/local/mysql/
+[root@localhost root]#  mkdir -p /usr/local/mysql/data/
+[root@localhost root]#  mkdir -p /usr/local/mysql/etc/
+[root@localhost root]#   ./configure --prefix=/usr/local/mysql/ --localstatedir=/usr/local/mysql/data/ --sysconfdir=/usr/local/mysql/etc/ --with-charset=utf8
+5编译安装
+[root@localhost root]#  make
+[root@localhost root]#  make install
+6设置文件权限
+[root@localhost root]#  chown -R root:mysql /usr/local/mysql/
+[root@localhost root]#  chown -R mysql:mysql /usr/local/mysql/data/
+[root@localhost root]#  chown -R mysql:mysql /usr/local/mysql/lib
+
+7安装数据文件
+[root@localhost root]#  cd /usr/local/mysql/bin/
+[root@localhost root]#  ./mysql_install_db --user=mysql
+8建立mysql启动文件
+[root@localhost root]#  cp /usr/local/mysql/share/mysql/mysql.server /etc/rc.d/init.d/mysqld
+[root@localhost root]#  cp /usr/local/mysql/share/mysql/my-medium.cnf /etc/my.cnf 
+9启动mysql
+[root@localhost root]#  /usr/local/mysql/share/mysql/mysql.server start
+
+10停止mysql
+[root@localhost root]#  /usr/local/mysql/share/mysql/mysql.server stop
+
+
+mysql赋权IP及用户访问操作
+允许root远程登陆：
+
+1）本机登陆mysql：MySQL-u root -p （-p一定要有）；改变数据库：use mysql;
+
+2）从所有主机：grant all privileges on *.* to root@"%" identified by "passw0rd" with grant option;
+
+3）从指定主机：grant all privileges on *.* to root@"192.168.0.253" identified by "123456" with grant option; flush privileges;
+
+4) 进mysql库查看host为%的数据是否添加：use mysql; select * from user;
+
+6. 创建数据库，创建user：
+
+1) 建库：create database test1;
+
+2) 建用户，赋权：grant all privileges on test1.* to user_test@"%" identified by "passw0rd" with grant option;
+
+3）删除数据库：drop database test1;
+
+7. 删除权限：
+
+1) revoke all privileges on test1.* from test1@"%";
+
+2) use mysql;
+
+3) delete from user where user="root" and host="%";
+
+4) flush privileges;
+
